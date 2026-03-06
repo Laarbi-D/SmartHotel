@@ -1,0 +1,46 @@
+services:
+  # --- BACKEND (PHP) ---
+  php:
+    build: ./backend            
+    container_name: php_server
+    volumes:
+      - ./backend:/var/www/html  
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+
+  # --- DATABASE (MySQL) ---
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_server
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: tp_db     
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+
+  # --- PHPMYADMIN (Optionnel) ---
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root             
+      PMA_PASSWORD: rootpassword 
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+
+# --- FRONTEND (Next.js) ---
+  frontend: 
+    build: ./frontend
+    container_name: nextjs_app
+    ports:
+      - "80:3000"
+    depends_on:
+      - php
