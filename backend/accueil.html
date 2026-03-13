@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Barcelo – Environmental Monitoring Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header__logo">
+      <!-- Remplacer par votre vrai logo -->
+      <div class="logo-placeholder">
+        <span class="logo-icon">🏨</span>
+        <span class="logo-text">BARCELO</span>
+      </div>
+    </div>
+    <nav class="header__nav">
+      <button class="btn-disconnect" onclick="handleDisconnect()">Disconnect</button>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <h1 class="dashboard-title">Environmental Monitoring Dashboard</h1>
+
+    <!-- KPI CARDS -->
+    <div class="kpi-grid">
+
+      <!-- Temperature Card -->
+      <div class="kpi-card kpi-card--temp">
+        <div class="kpi-card__icon kpi-card__icon--temp">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
+          </svg>
+        </div>
+        <div class="kpi-card__info">
+          <span class="kpi-card__label">Current Temperature</span>
+          <span class="kpi-card__value" id="temp-value">25.1°C</span>
+        </div>
+      </div>
+
+      <!-- Humidity Card -->
+      <div class="kpi-card kpi-card--hum">
+        <div class="kpi-card__icon kpi-card__icon--hum">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+        </div>
+        <div class="kpi-card__info">
+          <span class="kpi-card__label">Current Humidity</span>
+          <span class="kpi-card__value" id="hum-value">51.1%</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CHART CARD -->
+    <div class="chart-card">
+      <h2 class="chart-card__title">24-Hour Temperature &amp; Humidity History</h2>
+      <div class="chart-wrapper">
+        <canvas id="envChart"></canvas>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
