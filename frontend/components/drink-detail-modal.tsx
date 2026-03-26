@@ -4,29 +4,35 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { X, Minus, Plus } from "lucide-react";
-import type { Drink } from "@/lib/drinks-data";
 import { useCart } from "@/lib/cart-context";
 
 interface DrinkDetailModalProps {
-  drink: Drink | null;
-  isOpen: boolean;
-  onClose: () => void;
+  drink: any | null; // Reçoit l'objet produit depuis la BDD (MySQL)
+  isOpen: boolean;   // État pour savoir si la modale est affichée
+  onClose: () => void; // Fonction pour fermer la modale
 }
 
 export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalProps) {
-  const [quantity, setQuantity] = useState(1);
-  const [notes, setNotes] = useState("");
-  const { addItem } = useCart();
+  // --- ÉTATS LOCAUX ---
+  const [quantity, setQuantity] = useState(1); // Gère la quantité (1 par défaut)
+  const [notes, setNotes] = useState("");      // Stocke les demandes spéciales du client
+  const { addItem } = useCart();               // Récupère la fonction pour ajouter au panier
 
+  // --- ACTIONS ---
+  
+  // Fonction appelée lors du clic sur le bouton "Add to order"
   const handleAddToOrder = () => {
     if (drink) {
+      // On envoie les données au panier (Context API)
       addItem(drink, quantity, notes);
+      // On réinitialise les champs pour la prochaine ouverture
       setQuantity(1);
       setNotes("");
-      onClose();
+      onClose(); // Fermeture de la modale
     }
   };
 
+  // Réinitialisation si l'utilisateur ferme sans acheter
   const handleClose = () => {
     setQuantity(1);
     setNotes("");
@@ -37,7 +43,7 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
     <AnimatePresence>
       {isOpen && drink && (
         <>
-          {/* Backdrop */}
+          {/* FOND SOMBRE (BACKDROP) avec animation d'opacité */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -46,7 +52,7 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
             className="fixed inset-0 z-50 bg-navy-deep/70 backdrop-blur-sm"
           />
 
-          {/* Modal */}
+          {/* CONTENU DE LA MODALE avec animation d'entrée (Spring) */}
           <motion.div
             initial={{ opacity: 0, y: 100, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -55,7 +61,8 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
             className="fixed inset-x-4 bottom-4 top-auto z-50 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-lg"
           >
             <div className="bg-white rounded-3xl overflow-hidden shadow-2xl border border-border max-h-[90vh] overflow-y-auto">
-              {/* Close Button */}
+              
+              {/* BOUTON FERMER (X) */}
               <button
                 onClick={handleClose}
                 className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white transition-colors shadow-md"
@@ -63,29 +70,30 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
                 <X className="w-5 h-5 text-navy-deep" />
               </button>
 
-              {/* Image */}
+              {/* SECTION IMAGE : Récupère LIEN_IMAGE_PRODUIT depuis MySQL */}
               <div className="relative aspect-[4/3]">
                 <Image
-                  src={drink.image || "/placeholder.svg"}
-                  alt={drink.name}
+                  src={drink.LIEN_IMAGE_PRODUIT || "/placeholder.svg"}
+                  alt={drink.LIBELLE_PRODUITS || "Drink image"}
                   fill
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
               </div>
 
-              {/* Content */}
+              {/* SECTION INFOS : Nom, Prix et Description */}
               <div className="p-6 -mt-8 relative bg-white">
                 <div className="flex items-start justify-between gap-4 mb-4">
-                  <h2 className="font-serif text-3xl text-navy-deep">{drink.name}</h2>
-                  <span className="text-teal font-semibold text-2xl">€{drink.price}</span>
+                  {/* Libellé et Prix dynamiques */}
+                  <h2 className="font-serif text-3xl text-navy-deep">{drink.LIBELLE_PRODUITS}</h2>
+                  <span className="text-teal font-semibold text-2xl">€{drink.PRIX_PRODUITS}</span>
                 </div>
 
                 <p className="text-navy/60 leading-relaxed mb-6">
-                  {drink.description}
+                  {drink.DESCRIPTION_PRODUIT}
                 </p>
 
-                {/* Quantity Selector */}
+                {/* SÉLECTEUR DE QUANTITÉ (+ / -) */}
                 <div className="mb-6">
                   <label className="block text-sm text-navy/60 mb-3 font-medium">Quantity</label>
                   <div className="flex items-center gap-4">
@@ -97,9 +105,11 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
                     >
                       <Minus className="w-5 h-5 text-navy-deep" />
                     </motion.button>
+                    
                     <span className="text-2xl font-semibold text-navy-deep w-12 text-center">
                       {quantity}
                     </span>
+
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -111,11 +121,9 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
                   </div>
                 </div>
 
-                {/* Notes Field */}
+                {/* ZONE DE TEXTE POUR LES DEMANDES SPÉCIALES */}
                 <div className="mb-8">
-                  <label className="block text-sm text-navy/60 mb-3 font-medium">
-                    Special requests
-                  </label>
+                  <label className="block text-sm text-navy/60 mb-3 font-medium">Special requests</label>
                   <textarea
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
@@ -125,14 +133,14 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
                   />
                 </div>
 
-                {/* Add to Order Button */}
+                {/* BOUTON D'AJOUT : Calcul du prix total en temps réel */}
                 <motion.button
                   whileHover={{ scale: 1.01, y: -2 }}
                   whileTap={{ scale: 0.99 }}
                   onClick={handleAddToOrder}
                   className="w-full py-4 bg-teal text-white font-semibold rounded-2xl text-lg shadow-lg shadow-teal/20 hover:bg-teal-light transition-all duration-300"
                 >
-                  Add to order · €{(drink.price * quantity).toFixed(2)}
+                  Add to order · €{(drink.PRIX_PRODUITS * quantity).toFixed(2)}
                 </motion.button>
               </div>
             </div>

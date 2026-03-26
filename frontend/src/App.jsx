@@ -1,45 +1,62 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+"use client";
+
+import { useState } from 'react';
+import './App.css';
+// Import des composants qu'on a préparés
+import { DrinksMenu } from "./components/drinks-menu";
+import { DrinkDetailModal } from "./components/drink-detail-modal";
+import { Navbar } from "./components/navbar";
+import { Hero } from "./components/hero";
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [data, setData] = useState([]) // Pour stocker les données de la BDD
+  // --- ÉTATS POUR LA LOGIQUE DU SITE ---
+  
+  // Stocke la boisson sélectionnée quand on clique sur "Add to order"
+  const [selectedDrink, setSelectedDrink] = useState(null);
+  
+  // Gère l'affichage de la fenêtre surgissante (Modale)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Cette fonction s'exécute une seule fois au chargement de la page
-  useEffect(() => {
-    fetch('http://barcelosevilla.com:8080/api.php')
-      .then(res => res.json())
-      .then(json => setData(json))
-      .catch(err => console.error("Erreur BDD:", err))
-  }, [])
+  // --- ACTIONS ---
+
+  // Cette fonction est envoyée au DrinksMenu. 
+  // Quand on clique sur une carte, elle reçoit l'objet de la BDD.
+  const handleSelectDrink = (drink) => {
+    setSelectedDrink(drink);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedDrink(null);
+  };
 
   return (
-    <>
-      <h1>BarceloSevilla + MySQL</h1>
-      
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          Compteur de clics : {count}
-        </button>
-      </div>
+    <div className="min-h-screen bg-background">
+      {/* 1. La barre de navigation avec le logo et l'icône panier */}
+      <Navbar />
 
-      <div className="database-card" style={{ border: '1px solid #ccc', padding: '10px', marginTop: '20px' }}>
-        <h2>Données de ma base :</h2>
-        {data.length > 0 ? (
-          <ul>
-            {data.map((item, index) => (
-              <li key={index}>
-                {/* Ici, affiche une colonne de ta table, par exemple item.nom */}
-                {item.nom || JSON.stringify(item)}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>Chargement des données ou base vide...</p>
-        )}
-      </div>
-    </>
-  )
+      {/* 2. La bannière de bienvenue (Luxe / Barcelo) */}
+      <Hero />
+
+      {/* 3. LE MENU DYNAMIQUE (Connecté à ta table PRODUIT) */}
+      {/* On lui passe la fonction pour qu'il sache quoi faire au clic */}
+      <DrinksMenu onSelectDrink={handleSelectDrink} />
+
+      {/* 4. LA MODALE DE DÉTAIL */}
+      {/* Elle s'affiche par-dessus si isModalOpen est vrai */}
+      <DrinkDetailModal 
+        drink={selectedDrink} 
+        isOpen={isModalOpen} 
+        onClose={handleCloseModal} 
+      />
+
+      {/* 5. Pied de page discret */}
+      <footer className="py-8 text-center text-navy/30 text-xs">
+        © 2026 Barceló Sevilla Renacimiento · Service Room & Pool
+      </footer>
+    </div>
+  );
 }
 
-export default App
+export default App;

@@ -1,7 +1,7 @@
 services:
   # --- BACKEND (PHP) ---
   php:
-    build: ./backend            
+    build: ./backend             
     container_name: php_server
     volumes:
       - ./backend:/var/www/html  
@@ -17,14 +17,14 @@ services:
     container_name: mysql_server
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: tp_db     
+      MYSQL_DATABASE: smarthotelbdd     
     volumes:
       - ./mysql-data:/var/lib/mysql
       - ./mysql-init:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
 
-  # --- PHPMYADMIN (Optionnel) ---
+  # --- PHPMYADMIN ---
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: pma
@@ -37,7 +37,7 @@ services:
     depends_on:
       - mysql
 
-# --- FRONTEND (Next.js) ---
+  # --- FRONTEND (Next.js) ---
   frontend: 
     build: ./frontend
     container_name: nextjs_app
@@ -45,3 +45,20 @@ services:
       - "80:3000"
     depends_on:
       - php
+
+  # 🔥 --- GRAFANA (NOUVEAU) ---
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana_server
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+volumes:
+  grafana-storage:

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { CartProvider } from "@/lib/cart-context";
+import { CartProvider, useCart } from "@/lib/cart-context"; // Import groupé
 import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { Header } from "@/components/header";
 import { HeroSection } from "@/components/hero-section";
@@ -10,25 +10,21 @@ import { DrinkDetailModal } from "@/components/drink-detail-modal";
 import { CartDrawer } from "@/components/cart-drawer";
 import { ConfirmationModal } from "@/components/confirmation-modal";
 import { LoginScreen } from "@/components/login-screen";
-import { useCart } from "@/lib/cart-context";
-import type { Drink } from "@/lib/drinks-data";
 
-function AppContent() {
-  const { isAuthenticated } = useAuth();
-
-  if (!isAuthenticated) {
-    return <LoginScreen />;
-  }
-
-  return <MainApp />;
-}
-
+// --- CONTENU PRINCIPAL ---
 function MainApp() {
-  const [selectedDrink, setSelectedDrink] = useState<Drink | null>(null);
+  const { isAuthenticated } = useAuth();
+  const { clearCart } = useCart(); // Maintenant utilisable car dans le Provider
+  
+  const [selectedDrink, setSelectedDrink] = useState<any | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const menuRef = useRef<HTMLElement>(null);
-  const { clearCart } = useCart();
+
+  // Sécurité : Si pas connecté, on bloque sur le Login
+  if (!isAuthenticated) {
+    return <LoginScreen />;
+  }
 
   const scrollToMenu = () => {
     menuRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -37,11 +33,7 @@ function MainApp() {
   const handleConfirmOrder = () => {
     setIsCartOpen(false);
     setIsConfirmationOpen(true);
-    clearCart();
-  };
-
-  const handleCloseConfirmation = () => {
-    setIsConfirmationOpen(false);
+    clearCart(); // Vide le panier après confirmation
   };
 
   return (
@@ -72,44 +64,26 @@ function MainApp() {
 
       <ConfirmationModal
         isOpen={isConfirmationOpen}
-        onClose={handleCloseConfirmation}
+        onClose={() => setIsConfirmationOpen(false)}
       />
 
-      {/* Footer */}
+      {/* Footer Luxe */}
       <footer className="py-12 px-4 bg-card border-t border-border/50">
         <div className="max-w-6xl mx-auto text-center">
-          <p className="font-serif text-2xl text-foreground mb-2">
-            Barceló Sevilla Renacimiento
-          </p>
-          <p className="text-muted-foreground text-sm tracking-widest uppercase mb-6">
-            Five Star Luxury
-          </p>
-          <div className="flex items-center justify-center gap-1 mb-4">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <svg
-                key={star}
-                className="w-3 h-3 text-copper"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-            ))}
-          </div>
-          <p className="text-muted-foreground text-xs">
-            Pool Bar Service · Available 10:00 - 20:00
-          </p>
+          <p className="font-serif text-2xl text-foreground mb-2">Barceló Sevilla Renacimiento</p>
+          <p className="text-muted-foreground text-xs uppercase tracking-widest">Five Star Luxury · Pool Bar Service</p>
         </div>
       </footer>
     </main>
   );
 }
 
+// --- EXPORT PAR DÉFAUT (POINT D'ENTRÉE) ---
 export default function Home() {
   return (
     <AuthProvider>
       <CartProvider>
-        <AppContent />
+        <MainApp />
       </CartProvider>
     </AuthProvider>
   );
