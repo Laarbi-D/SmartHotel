@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartHotel — Supervision</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300;400;500;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">⬡</div>
+    <div class="logo-text">Smart<span>Hotel</span></div>
+  </div>
+  <div class="header-right">
+    <div id="last-update">Dernière mise à jour : —</div>
+    <div class="status-dot">
+      <div class="dot offline" id="ws-dot"></div>
+      <span id="ws-label">Connexion...</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="sensor-card temp" id="card-temp">
+    <div class="card-header">
+      <div class="card-label">Température</div>
+      <div class="badge normal" id="badge-temp">
+        <div class="badge-dot"></div>
+        <span>Normal</span>
+      </div>
+    </div>
+    <div>
+      <span class="card-value" id="val-temp">—</span>
+      <span class="card-unit">°C</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar-temp" style="width:0%"></div>
+    </div>
+    <div class="card-footer">
+      <span class="seuil-label">Seuil alerte</span>
+      <span class="seuil-value">21 °C</span>
+    </div>
+    <div class="card-bg-icon">🌡</div>
+  </div>
+
+  <div class="sensor-card humi" id="card-humi">
+    <div class="card-header">
+      <div class="card-label">Humidité</div>
+      <div class="badge normal" id="badge-humi">
+        <div class="badge-dot"></div>
+        <span>Normal</span>
+      </div>
+    </div>
+    <div>
+      <span class="card-value" id="val-humi">—</span>
+      <span class="card-unit">%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar-humi" style="width:0%"></div>
+    </div>
+    <div class="card-footer">
+      <span class="seuil-label">Seuil alerte</span>
+      <span class="seuil-value">70 %</span>
+    </div>
+    <div class="card-bg-icon">💧</div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <div class="chart-title">Historique — 24 dernières heures</div>
+      <div class="chart-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#f59e0b"></div>
+          <span>Température (°C)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#06b6d4"></div>
+          <span>Humidité (%)</span>
+        </div>
+      </div>
+    </div>
+    <div class="chart-container">
+      <canvas id="chart"></canvas>
+    </div>
+  </div>
+
+  <div class="afficheur-card">
+    <div class="afficheur-info">
+      <div class="afficheur-icon">📟</div>
+      <div>
+        <div class="afficheur-label">Afficheur AIMLP-AIW3</div>
+        <div class="afficheur-ip">192.168.112.210 : 502</div>
+      </div>
+    </div>
+    <div class="afficheur-status ok" id="modbus-status">
+      <span>●</span>
+      <span id="modbus-label">En attente...</span>
+    </div>
+  </div>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

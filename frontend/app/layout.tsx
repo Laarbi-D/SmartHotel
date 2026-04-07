@@ -4,6 +4,10 @@ import { Cormorant_Garamond, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
+// On importe nos deux cerveaux (Panier et Langue)
+import { CartProvider } from "@/lib/cart-context";
+import { LanguageProvider } from "@/lib/language-context";
+
 const cormorant = Cormorant_Garamond({ 
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -21,18 +25,9 @@ export const metadata: Metadata = {
   generator: 'v0.app',
   icons: {
     icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
+      { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
+      { url: '/icon-dark-32x32.png', media: '(prefers-color-scheme: dark)' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
     ],
     apple: '/apple-icon.png',
   },
@@ -52,7 +47,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${cormorant.variable} ${inter.variable} font-sans antialiased`}>
-        {children}
+        {/* On enveloppe tout le site ici */}
+        <LanguageProvider>
+          <CartProvider>
+            {children}
+          </CartProvider>
+        </LanguageProvider>
+        
         <Analytics />
       </body>
     </html>

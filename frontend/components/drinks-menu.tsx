@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { categories } from "@/lib/drinks-data"; 
 import { DrinkCard } from "./drink-card";
 import { WaveDecoration } from "./wave-decoration";
+import { useLanguage } from "@/lib/language-context"; // Import du context
 
 interface DrinksMenuProps {
   onSelectDrink: (drink: any) => void;
@@ -16,22 +17,23 @@ export const DrinksMenu = forwardRef<HTMLElement, DrinksMenuProps>(
     const [dbDrinks, setDbDrinks] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    
+    const { t } = useLanguage(); // Récupération des traductions
 
     useEffect(() => {
       setLoading(true);
       setError(null);
 
-      // --- CONNEXION À TON IP FIXE ---
+      // On garde ton IP Tailscale/Fixe ici
       fetch('http://192.168.112.158:8080/api.php?table=PRODUIT', {
         method: 'GET',
-        mode: 'cors', // Crucial pour que le navigateur accepte la réponse du PHP
+        mode: 'cors',
       })
         .then((res) => {
           if (!res.ok) throw new Error(`Serveur injoignable (Statut ${res.status})`);
           return res.json();
         })
         .then((data) => {
-          // Si l'API renvoie un tableau (même vide), c'est bon
           if (Array.isArray(data)) {
             setDbDrinks(data);
           } else {
@@ -40,16 +42,14 @@ export const DrinksMenu = forwardRef<HTMLElement, DrinksMenuProps>(
         })
         .catch((err) => {
           console.error("ERREUR RÉSEAU :", err);
-          // C'est ce message qui s'affiche si le fetch échoue
           setError(err.message);
         })
         .finally(() => setLoading(false));
     }, []);
 
-    // --- FILTRAGE STRICT ---
     const displayDrinks = dbDrinks.filter((drink) => {
-      const bddCat = (drink.CATEGORIE || drink.categorie || "").toString().trim();
-      return bddCat === activeCategory;
+      const bddCat = (drink.CATEGORIE || drink.categorie || "").toString().trim().toLowerCase();
+      return bddCat === activeCategory.toLowerCase();
     });
 
     return (
@@ -58,11 +58,16 @@ export const DrinksMenu = forwardRef<HTMLElement, DrinksMenuProps>(
 
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="font-serif text-4xl md:text-5xl text-navy-deep mb-4">Our Selection</h2>
-            <p className="text-navy/60 text-lg">Directly from the bar to you</p>
+            {/* TITRE ET SOUS-TITRE TRADUITS */}
+            <h2 className="font-serif text-4xl md:text-5xl text-navy-deep mb-4">
+              {t.menu.title}
+            </h2>
+            <p className="text-navy/60 text-lg">
+              {t.menu.subtitle}
+            </p>
           </div>
 
-          {/* ONGLETS */}
+          {/* ONGLETS TRADUITS */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
             {categories.map((cat) => (
               <button
@@ -74,7 +79,8 @@ export const DrinksMenu = forwardRef<HTMLElement, DrinksMenuProps>(
                     : "bg-white text-navy border border-border hover:bg-muted"
                 }`}
               >
-                {cat.label}
+                {/* On cherche la traduction de la catégorie (ex: t.categories.softs) */}
+                {t.categories[cat.id] || cat.label}
               </button>
             ))}
           </div>
@@ -99,14 +105,16 @@ export const DrinksMenu = forwardRef<HTMLElement, DrinksMenuProps>(
               ) : (
                 <div className="col-span-full text-center py-20 border-2 border-dashed border-border rounded-3xl">
                   {loading ? (
-                    <p className="animate-pulse text-teal">Connecting to 192.168.112.158...</p>
+                    <p className="animate-pulse text-teal">{t.menu.loading}</p>
                   ) : error ? (
                     <div className="text-red-500">
-                      <p className="font-bold">Server Error</p>
-                      <p className="text-xs opacity-70">Check console (F12) for details</p>
+                      <p className="font-bold">{t.menu.error}</p>
+                      <p className="text-xs opacity-70">{error}</p>
                     </div>
                   ) : (
-                    <p className="text-navy/40 italic">No drinks found in "{activeCategory}"</p>
+                    <p className="text-navy/40 italic">
+                      {t.menu.noDrinks} "{t.categories[activeCategory] || activeCategory}"
+                    </p>
                   )}
                 </div>
               )}

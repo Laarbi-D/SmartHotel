@@ -18,11 +18,13 @@ const CartContext = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project
 function CartProvider({ children }) {
     _s();
     const [items, setItems] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    // --- AJOUTER UN PRODUIT ---
     const addItem = (drink, quantity, notes)=>{
         setItems((prev)=>{
-            const existing = prev.find((item)=>item.drink.id === drink.id);
+            // On vérifie si le produit existe via ID_PRODUIT (colonne MySQL)
+            const existing = prev.find((item)=>item.drink.ID_PRODUIT === drink.ID_PRODUIT);
             if (existing) {
-                return prev.map((item)=>item.drink.id === drink.id ? {
+                return prev.map((item)=>item.drink.ID_PRODUIT === drink.ID_PRODUIT ? {
                         ...item,
                         quantity: item.quantity + quantity,
                         notes
@@ -38,22 +40,30 @@ function CartProvider({ children }) {
             ];
         });
     };
+    // --- SUPPRIMER UN PRODUIT ---
     const removeItem = (drinkId)=>{
-        setItems((prev)=>prev.filter((item)=>item.drink.id !== drinkId));
+        setItems((prev)=>prev.filter((item)=>item.drink.ID_PRODUIT !== drinkId));
     };
+    // --- METTRE À JOUR LA QUANTITÉ ---
     const updateQuantity = (drinkId, quantity)=>{
         if (quantity <= 0) {
             removeItem(drinkId);
             return;
         }
-        setItems((prev)=>prev.map((item)=>item.drink.id === drinkId ? {
+        setItems((prev)=>prev.map((item)=>item.drink.ID_PRODUIT === drinkId ? {
                     ...item,
                     quantity
                 } : item));
     };
+    // --- VIDER LE PANIER ---
     const clearCart = ()=>setItems([]);
+    // --- CALCULS DU PANIER (Adapté à MySQL) ---
     const totalItems = items.reduce((sum, item)=>sum + item.quantity, 0);
-    const totalPrice = items.reduce((sum, item)=>sum + item.drink.price * item.quantity, 0);
+    const totalPrice = items.reduce((sum, item)=>{
+        // On force le prix MySQL en nombre pour éviter les erreurs "NaN"
+        const price = parseFloat(item.drink.PRIX_PRODUITS) || 0;
+        return sum + price * item.quantity;
+    }, 0);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CartContext.Provider, {
         value: {
             items,
@@ -67,7 +77,7 @@ function CartProvider({ children }) {
         children: children
     }, void 0, false, {
         fileName: "[project]/lib/cart-context.tsx",
-        lineNumber: 66,
+        lineNumber: 74,
         columnNumber: 5
     }, this);
 }
@@ -1600,7 +1610,7 @@ function CartDrawer({ isOpen, onClose, onConfirmOrder }) {
                     className: "fixed inset-0 z-50 bg-navy-deep/60 backdrop-blur-sm"
                 }, void 0, false, {
                     fileName: "[project]/components/cart-drawer.tsx",
-                    lineNumber: 22,
+                    lineNumber: 24,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1618,319 +1628,279 @@ function CartDrawer({ isOpen, onClose, onConfirmOrder }) {
                         damping: 25,
                         stiffness: 300
                     },
-                    className: "fixed right-0 top-0 bottom-0 z-50 w-full max-w-md bg-white shadow-2xl border-l border-border",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex flex-col h-full",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex items-center justify-between p-6 border-b border-border",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                        className: "font-serif text-2xl text-navy-deep",
-                                        children: "Your Order"
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/cart-drawer.tsx",
-                                        lineNumber: 41,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        onClick: onClose,
-                                        className: "p-2 rounded-full hover:bg-muted transition-colors",
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                            className: "w-5 h-5 text-navy-deep"
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/cart-drawer.tsx",
-                                            lineNumber: 46,
-                                            columnNumber: 19
-                                        }, this)
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/cart-drawer.tsx",
-                                        lineNumber: 42,
-                                        columnNumber: 17
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/components/cart-drawer.tsx",
-                                lineNumber: 40,
-                                columnNumber: 15
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex-1 overflow-y-auto p-6",
-                                children: items.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "h-full flex flex-col items-center justify-center text-center",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-4",
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                                                className: "w-10 h-10 text-navy/40",
-                                                fill: "none",
-                                                viewBox: "0 0 24 24",
-                                                stroke: "currentColor",
-                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                                                    strokeLinecap: "round",
-                                                    strokeLinejoin: "round",
-                                                    strokeWidth: 1.5,
-                                                    d: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/cart-drawer.tsx",
-                                                    lineNumber: 61,
-                                                    columnNumber: 25
-                                                }, this)
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/cart-drawer.tsx",
-                                                lineNumber: 55,
-                                                columnNumber: 23
-                                            }, this)
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/cart-drawer.tsx",
-                                            lineNumber: 54,
-                                            columnNumber: 21
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-navy-deep font-medium",
-                                            children: "Your order is empty"
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/cart-drawer.tsx",
-                                            lineNumber: 69,
-                                            columnNumber: 21
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-sm text-navy/50 mt-1",
-                                            children: "Add some drinks to get started"
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/cart-drawer.tsx",
-                                            lineNumber: 70,
-                                            columnNumber: 21
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
+                    className: "fixed right-0 top-0 bottom-0 z-50 w-full max-w-md bg-white shadow-2xl border-l border-border flex flex-col",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-center justify-between p-6 border-b border-border",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                    className: "font-serif text-2xl text-navy-deep",
+                                    children: "Your Order"
+                                }, void 0, false, {
                                     fileName: "[project]/components/cart-drawer.tsx",
-                                    lineNumber: 53,
-                                    columnNumber: 19
-                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "space-y-4",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
-                                        children: items.map((item)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
-                                                layout: true,
-                                                initial: {
-                                                    opacity: 0,
-                                                    y: 20
-                                                },
-                                                animate: {
-                                                    opacity: 1,
-                                                    y: 0
-                                                },
-                                                exit: {
-                                                    opacity: 0,
-                                                    x: 100
-                                                },
-                                                className: "flex gap-4 p-4 bg-muted rounded-2xl border border-border",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0",
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                                            src: item.drink.image || "/placeholder.svg",
-                                                            alt: item.drink.name,
-                                                            fill: true,
-                                                            className: "object-cover"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/cart-drawer.tsx",
-                                                            lineNumber: 87,
-                                                            columnNumber: 29
-                                                        }, this)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/components/cart-drawer.tsx",
-                                                        lineNumber: 86,
-                                                        columnNumber: 27
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "flex-1 min-w-0",
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                                className: "font-serif text-lg text-navy-deep truncate",
-                                                                children: item.drink.name
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/components/cart-drawer.tsx",
-                                                                lineNumber: 95,
-                                                                columnNumber: 29
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                className: "text-teal font-medium",
-                                                                children: [
-                                                                    "€",
-                                                                    (item.drink.price * item.quantity).toFixed(2)
-                                                                ]
-                                                            }, void 0, true, {
-                                                                fileName: "[project]/components/cart-drawer.tsx",
-                                                                lineNumber: 98,
-                                                                columnNumber: 29
-                                                            }, this),
-                                                            item.notes && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                className: "text-xs text-navy/50 mt-1 truncate",
-                                                                children: item.notes
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/components/cart-drawer.tsx",
-                                                                lineNumber: 102,
-                                                                columnNumber: 31
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                className: "flex items-center gap-2 mt-2",
-                                                                children: [
-                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                        onClick: ()=>updateQuantity(item.drink.id, item.quantity - 1),
-                                                                        className: "w-8 h-8 rounded-lg bg-white flex items-center justify-center hover:bg-secondary transition-colors border border-border",
-                                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$minus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Minus$3e$__["Minus"], {
-                                                                            className: "w-4 h-4 text-navy-deep"
-                                                                        }, void 0, false, {
-                                                                            fileName: "[project]/components/cart-drawer.tsx",
-                                                                            lineNumber: 111,
-                                                                            columnNumber: 33
-                                                                        }, this)
-                                                                    }, void 0, false, {
-                                                                        fileName: "[project]/components/cart-drawer.tsx",
-                                                                        lineNumber: 107,
-                                                                        columnNumber: 31
-                                                                    }, this),
-                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                        className: "w-8 text-center text-navy-deep font-medium",
-                                                                        children: item.quantity
-                                                                    }, void 0, false, {
-                                                                        fileName: "[project]/components/cart-drawer.tsx",
-                                                                        lineNumber: 113,
-                                                                        columnNumber: 31
-                                                                    }, this),
-                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                        onClick: ()=>updateQuantity(item.drink.id, item.quantity + 1),
-                                                                        className: "w-8 h-8 rounded-lg bg-white flex items-center justify-center hover:bg-secondary transition-colors border border-border",
-                                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
-                                                                            className: "w-4 h-4 text-navy-deep"
-                                                                        }, void 0, false, {
-                                                                            fileName: "[project]/components/cart-drawer.tsx",
-                                                                            lineNumber: 120,
-                                                                            columnNumber: 33
-                                                                        }, this)
-                                                                    }, void 0, false, {
-                                                                        fileName: "[project]/components/cart-drawer.tsx",
-                                                                        lineNumber: 116,
-                                                                        columnNumber: 31
-                                                                    }, this),
-                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                        onClick: ()=>removeItem(item.drink.id),
-                                                                        className: "ml-auto p-2 text-navy/40 hover:text-destructive transition-colors",
-                                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__["Trash2"], {
-                                                                            className: "w-4 h-4"
-                                                                        }, void 0, false, {
-                                                                            fileName: "[project]/components/cart-drawer.tsx",
-                                                                            lineNumber: 126,
-                                                                            columnNumber: 33
-                                                                        }, this)
-                                                                    }, void 0, false, {
-                                                                        fileName: "[project]/components/cart-drawer.tsx",
-                                                                        lineNumber: 122,
-                                                                        columnNumber: 31
-                                                                    }, this)
-                                                                ]
-                                                            }, void 0, true, {
-                                                                fileName: "[project]/components/cart-drawer.tsx",
-                                                                lineNumber: 106,
-                                                                columnNumber: 29
-                                                            }, this)
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/components/cart-drawer.tsx",
-                                                        lineNumber: 94,
-                                                        columnNumber: 27
-                                                    }, this)
-                                                ]
-                                            }, item.drink.id, true, {
-                                                fileName: "[project]/components/cart-drawer.tsx",
-                                                lineNumber: 78,
-                                                columnNumber: 25
-                                            }, this))
+                                    lineNumber: 42,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: onClose,
+                                    className: "p-2 rounded-full hover:bg-muted transition-colors",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
+                                        className: "w-5 h-5 text-navy-deep"
                                     }, void 0, false, {
                                         fileName: "[project]/components/cart-drawer.tsx",
-                                        lineNumber: 76,
-                                        columnNumber: 21
+                                        lineNumber: 44,
+                                        columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/cart-drawer.tsx",
-                                    lineNumber: 75,
+                                    lineNumber: 43,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/cart-drawer.tsx",
+                            lineNumber: 41,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex-1 overflow-y-auto p-6",
+                            children: items.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "h-full flex flex-col items-center justify-center text-center opacity-40",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: "Your basket is empty"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/cart-drawer.tsx",
+                                    lineNumber: 52,
                                     columnNumber: 19
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/cart-drawer.tsx",
                                 lineNumber: 51,
-                                columnNumber: 15
-                            }, this),
-                            items.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "p-6 border-t border-border bg-white",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "flex items-center justify-between mb-6",
+                                columnNumber: 17
+                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "space-y-4",
+                                children: items.map((item)=>{
+                                    // Extraction sécurisée des données MySQL
+                                    const id = item.drink.ID_PRODUIT;
+                                    const name = item.drink.LIBELLE_PRODUITS || "Drink";
+                                    const price = parseFloat(item.drink.PRIX_PRODUITS) || 0;
+                                    const image = item.drink.LIEN_IMAGE_PRODUIT || "/placeholder.svg";
+                                    const lineTotal = price * item.quantity;
+                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
+                                        layout: true,
+                                        initial: {
+                                            opacity: 0,
+                                            y: 10
+                                        },
+                                        animate: {
+                                            opacity: 1,
+                                            y: 0
+                                        },
+                                        className: "flex gap-4 p-4 bg-muted rounded-2xl border border-border",
                                         children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "text-navy/60",
-                                                children: "Total"
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                                    src: image,
+                                                    alt: name,
+                                                    fill: true,
+                                                    className: "object-cover"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/cart-drawer.tsx",
+                                                    lineNumber: 73,
+                                                    columnNumber: 27
+                                                }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/cart-drawer.tsx",
-                                                lineNumber: 141,
-                                                columnNumber: 21
+                                                lineNumber: 72,
+                                                columnNumber: 25
                                             }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "text-3xl font-serif text-navy-deep",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex-1 min-w-0",
                                                 children: [
-                                                    "€",
-                                                    totalPrice.toFixed(2)
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "flex justify-between items-start",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                                className: "font-serif text-lg text-navy-deep truncate",
+                                                                children: name
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/cart-drawer.tsx",
+                                                                lineNumber: 78,
+                                                                columnNumber: 29
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                className: "text-teal font-bold",
+                                                                children: [
+                                                                    "€",
+                                                                    lineTotal.toFixed(2)
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/components/cart-drawer.tsx",
+                                                                lineNumber: 79,
+                                                                columnNumber: 29
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/cart-drawer.tsx",
+                                                        lineNumber: 77,
+                                                        columnNumber: 27
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "flex items-center gap-3 mt-3",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "flex items-center gap-2 bg-white rounded-lg border border-border px-1",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                        type: "button",
+                                                                        onClick: ()=>updateQuantity(id, item.quantity - 1),
+                                                                        className: "p-1",
+                                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$minus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Minus$3e$__["Minus"], {
+                                                                            className: "w-4 h-4"
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/components/cart-drawer.tsx",
+                                                                            lineNumber: 89,
+                                                                            columnNumber: 33
+                                                                        }, this)
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/components/cart-drawer.tsx",
+                                                                        lineNumber: 84,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                        className: "w-6 text-center font-bold text-sm",
+                                                                        children: item.quantity
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/components/cart-drawer.tsx",
+                                                                        lineNumber: 91,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                        type: "button",
+                                                                        onClick: ()=>updateQuantity(id, item.quantity + 1),
+                                                                        className: "p-1",
+                                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
+                                                                            className: "w-4 h-4"
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/components/cart-drawer.tsx",
+                                                                            lineNumber: 97,
+                                                                            columnNumber: 33
+                                                                        }, this)
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/components/cart-drawer.tsx",
+                                                                        lineNumber: 92,
+                                                                        columnNumber: 31
+                                                                    }, this)
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/components/cart-drawer.tsx",
+                                                                lineNumber: 83,
+                                                                columnNumber: 29
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                type: "button",
+                                                                onClick: ()=>removeItem(id),
+                                                                className: "ml-auto text-red-400 hover:text-red-600 transition-colors",
+                                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__["Trash2"], {
+                                                                    className: "w-4 h-4"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/components/cart-drawer.tsx",
+                                                                    lineNumber: 105,
+                                                                    columnNumber: 31
+                                                                }, this)
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/cart-drawer.tsx",
+                                                                lineNumber: 100,
+                                                                columnNumber: 29
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/cart-drawer.tsx",
+                                                        lineNumber: 82,
+                                                        columnNumber: 27
+                                                    }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/cart-drawer.tsx",
-                                                lineNumber: 142,
-                                                columnNumber: 21
+                                                lineNumber: 76,
+                                                columnNumber: 25
                                             }, this)
                                         ]
-                                    }, void 0, true, {
+                                    }, id, true, {
                                         fileName: "[project]/components/cart-drawer.tsx",
-                                        lineNumber: 140,
-                                        columnNumber: 19
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].button, {
-                                        whileHover: {
-                                            scale: 1.01,
-                                            y: -2
-                                        },
-                                        whileTap: {
-                                            scale: 0.99
-                                        },
-                                        onClick: onConfirmOrder,
-                                        className: "w-full py-4 bg-teal text-white font-semibold rounded-2xl text-lg shadow-lg shadow-teal/20 hover:bg-teal-light transition-all duration-300",
-                                        children: "Confirm Order"
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/cart-drawer.tsx",
-                                        lineNumber: 146,
-                                        columnNumber: 19
-                                    }, this)
-                                ]
-                            }, void 0, true, {
+                                        lineNumber: 65,
+                                        columnNumber: 23
+                                    }, this);
+                                })
+                            }, void 0, false, {
                                 fileName: "[project]/components/cart-drawer.tsx",
-                                lineNumber: 139,
+                                lineNumber: 55,
                                 columnNumber: 17
                             }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/components/cart-drawer.tsx",
-                        lineNumber: 38,
-                        columnNumber: 13
-                    }, this)
-                }, void 0, false, {
+                        }, void 0, false, {
+                            fileName: "[project]/components/cart-drawer.tsx",
+                            lineNumber: 49,
+                            columnNumber: 13
+                        }, this),
+                        items.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "p-6 border-t border-border bg-white",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex items-center justify-between mb-6",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "text-navy/60 font-medium",
+                                            children: "Total Amount"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/cart-drawer.tsx",
+                                            lineNumber: 120,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "text-3xl font-serif text-navy-deep",
+                                            children: [
+                                                "€",
+                                                totalPrice.toFixed(2)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/components/cart-drawer.tsx",
+                                            lineNumber: 121,
+                                            columnNumber: 19
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/cart-drawer.tsx",
+                                    lineNumber: 119,
+                                    columnNumber: 17
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    type: "button",
+                                    onClick: onConfirmOrder,
+                                    className: "w-full py-4 bg-teal text-white font-semibold rounded-2xl shadow-lg hover:bg-teal-light transition-all",
+                                    children: "Confirm Order"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/cart-drawer.tsx",
+                                    lineNumber: 125,
+                                    columnNumber: 17
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/cart-drawer.tsx",
+                            lineNumber: 118,
+                            columnNumber: 15
+                        }, this)
+                    ]
+                }, void 0, true, {
                     fileName: "[project]/components/cart-drawer.tsx",
-                    lineNumber: 31,
+                    lineNumber: 33,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true)
     }, void 0, false, {
         fileName: "[project]/components/cart-drawer.tsx",
-        lineNumber: 18,
+        lineNumber: 20,
         columnNumber: 5
     }, this);
 }

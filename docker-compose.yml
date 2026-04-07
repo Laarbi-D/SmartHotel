@@ -46,7 +46,7 @@ services:
     depends_on:
       - php
 
-  # 🔥 --- GRAFANA (NOUVEAU) ---
+  #  --- GRAFANA ---
   grafana:
     image: grafana/grafana:latest
     container_name: grafana_server

@@ -5,34 +5,29 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { X, Minus, Plus } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
+import { useLanguage } from "@/lib/language-context"; // Import du context
 
 interface DrinkDetailModalProps {
-  drink: any | null; // Reçoit l'objet produit depuis la BDD (MySQL)
-  isOpen: boolean;   // État pour savoir si la modale est affichée
-  onClose: () => void; // Fonction pour fermer la modale
+  drink: any | null;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalProps) {
-  // --- ÉTATS LOCAUX ---
-  const [quantity, setQuantity] = useState(1); // Gère la quantité (1 par défaut)
-  const [notes, setNotes] = useState("");      // Stocke les demandes spéciales du client
-  const { addItem } = useCart();               // Récupère la fonction pour ajouter au panier
+  const [quantity, setQuantity] = useState(1);
+  const [notes, setNotes] = useState("");
+  const { addItem } = useCart();
+  const { t } = useLanguage(); // Récupération des traductions
 
-  // --- ACTIONS ---
-  
-  // Fonction appelée lors du clic sur le bouton "Add to order"
   const handleAddToOrder = () => {
     if (drink) {
-      // On envoie les données au panier (Context API)
       addItem(drink, quantity, notes);
-      // On réinitialise les champs pour la prochaine ouverture
       setQuantity(1);
       setNotes("");
-      onClose(); // Fermeture de la modale
+      onClose();
     }
   };
 
-  // Réinitialisation si l'utilisateur ferme sans acheter
   const handleClose = () => {
     setQuantity(1);
     setNotes("");
@@ -43,7 +38,7 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
     <AnimatePresence>
       {isOpen && drink && (
         <>
-          {/* FOND SOMBRE (BACKDROP) avec animation d'opacité */}
+          {/* FOND SOMBRE */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -52,7 +47,7 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
             className="fixed inset-0 z-50 bg-navy-deep/70 backdrop-blur-sm"
           />
 
-          {/* CONTENU DE LA MODALE avec animation d'entrée (Spring) */}
+          {/* CONTENU DE LA MODALE */}
           <motion.div
             initial={{ opacity: 0, y: 100, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -62,7 +57,6 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
           >
             <div className="bg-white rounded-3xl overflow-hidden shadow-2xl border border-border max-h-[90vh] overflow-y-auto">
               
-              {/* BOUTON FERMER (X) */}
               <button
                 onClick={handleClose}
                 className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white transition-colors shadow-md"
@@ -70,7 +64,7 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
                 <X className="w-5 h-5 text-navy-deep" />
               </button>
 
-              {/* SECTION IMAGE : Récupère LIEN_IMAGE_PRODUIT depuis MySQL */}
+              {/* IMAGE */}
               <div className="relative aspect-[4/3]">
                 <Image
                   src={drink.LIEN_IMAGE_PRODUIT || "/placeholder.svg"}
@@ -81,10 +75,9 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
                 <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
               </div>
 
-              {/* SECTION INFOS : Nom, Prix et Description */}
+              {/* INFOS PRODUIT */}
               <div className="p-6 -mt-8 relative bg-white">
                 <div className="flex items-start justify-between gap-4 mb-4">
-                  {/* Libellé et Prix dynamiques */}
                   <h2 className="font-serif text-3xl text-navy-deep">{drink.LIBELLE_PRODUITS}</h2>
                   <span className="text-teal font-semibold text-2xl">€{drink.PRIX_PRODUITS}</span>
                 </div>
@@ -93,15 +86,16 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
                   {drink.DESCRIPTION_PRODUIT}
                 </p>
 
-                {/* SÉLECTEUR DE QUANTITÉ (+ / -) */}
+                {/* QUANTITÉ - TRADUIT */}
                 <div className="mb-6">
-                  <label className="block text-sm text-navy/60 mb-3 font-medium">Quantity</label>
+                  <label className="block text-sm text-navy/60 mb-3 font-medium">
+                    {t.common.quantity}
+                  </label>
                   <div className="flex items-center gap-4">
                     <motion.button
-                      whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center hover:bg-secondary transition-colors border border-border"
+                      className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center border border-border"
                     >
                       <Minus className="w-5 h-5 text-navy-deep" />
                     </motion.button>
@@ -111,36 +105,37 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
                     </span>
 
                     <motion.button
-                      whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setQuantity(quantity + 1)}
-                      className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center hover:bg-secondary transition-colors border border-border"
+                      className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center border border-border"
                     >
                       <Plus className="w-5 h-5 text-navy-deep" />
                     </motion.button>
                   </div>
                 </div>
 
-                {/* ZONE DE TEXTE POUR LES DEMANDES SPÉCIALES */}
+                {/* DEMANDES SPÉCIALES - TRADUIT */}
                 <div className="mb-8">
-                  <label className="block text-sm text-navy/60 mb-3 font-medium">Special requests</label>
+                  <label className="block text-sm text-navy/60 mb-3 font-medium">
+                    {t.cart.specialRequests}
+                  </label>
                   <textarea
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Less ice, extra lemon, no garnish..."
-                    className="w-full px-4 py-3 bg-muted rounded-xl text-navy-deep placeholder:text-navy/40 resize-none border border-border focus:border-teal focus:ring-1 focus:ring-teal/50 outline-none transition-all"
+                    placeholder={t.cart.specialPlaceholder}
+                    className="w-full px-4 py-3 bg-muted rounded-xl text-navy-deep border border-border focus:border-teal outline-none transition-all"
                     rows={2}
                   />
                 </div>
 
-                {/* BOUTON D'AJOUT : Calcul du prix total en temps réel */}
+                {/* BOUTON D'AJOUT - TRADUIT */}
                 <motion.button
                   whileHover={{ scale: 1.01, y: -2 }}
                   whileTap={{ scale: 0.99 }}
                   onClick={handleAddToOrder}
-                  className="w-full py-4 bg-teal text-white font-semibold rounded-2xl text-lg shadow-lg shadow-teal/20 hover:bg-teal-light transition-all duration-300"
+                  className="w-full py-4 bg-teal text-white font-semibold rounded-2xl text-lg shadow-lg hover:bg-teal-light transition-all"
                 >
-                  Add to order · €{(drink.PRIX_PRODUITS * quantity).toFixed(2)}
+                  {t.cart.addOrder} · €{(drink.PRIX_PRODUITS * quantity).toFixed(2)}
                 </motion.button>
               </div>
             </div>

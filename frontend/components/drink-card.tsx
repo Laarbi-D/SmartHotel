@@ -3,15 +3,17 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Plus } from "lucide-react";
+import { useLanguage } from "@/lib/language-context"; // Import du context
 
 interface DrinkCardProps {
-  // 'drink' contient maintenant une ligne complète de la table PRODUIT (MySQL)
   drink: any; 
   onSelect: (drink: any) => void;
   index: number;
 }
 
 export function DrinkCard({ drink, onSelect, index }: DrinkCardProps) {
+  const { t } = useLanguage(); // On récupère les traductions
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -20,7 +22,7 @@ export function DrinkCard({ drink, onSelect, index }: DrinkCardProps) {
       whileHover={{ y: -4 }}
       className="group relative bg-card rounded-2xl overflow-hidden border border-border hover:border-teal/40 transition-all duration-300 shadow-sm hover:shadow-md"
     >
-      {/* SECTION IMAGE : Récupération du chemin via la BDD */}
+      {/* SECTION IMAGE */}
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
           src={drink.LIEN_IMAGE_PRODUIT || "/placeholder.svg"} 
@@ -32,7 +34,7 @@ export function DrinkCard({ drink, onSelect, index }: DrinkCardProps) {
       </div>
 
       <div className="p-5">
-        {/* EN-TÊTE : Libellé et Prix extraits de la BDD */}
+        {/* EN-TÊTE : Libellé et Prix */}
         <div className="flex items-start justify-between gap-3 mb-2">
           <h3 className="font-serif text-xl text-navy-deep">
             {drink.LIBELLE_PRODUITS}
@@ -42,12 +44,12 @@ export function DrinkCard({ drink, onSelect, index }: DrinkCardProps) {
           </span>
         </div>
         
-        {/* DESCRIPTION : Extraite de la BDD */}
-        <p className="text-navy/60 text-sm leading-relaxed mb-4">
+        {/* DESCRIPTION */}
+        <p className="text-navy/60 text-sm leading-relaxed mb-4 line-clamp-2">
           {drink.DESCRIPTION_PRODUIT}
         </p>
 
-        {/* BOUTON D'ACTION : Ouvre la modale de détail */}
+        {/* BOUTON D'ACTION - TRADUIT */}
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -55,7 +57,7 @@ export function DrinkCard({ drink, onSelect, index }: DrinkCardProps) {
           className="w-full py-3 bg-muted hover:bg-teal text-navy hover:text-white font-medium rounded-xl flex items-center justify-center gap-2 transition-all duration-300"
         >
           <Plus className="w-4 h-4" />
-          Add to order
+          {t.cart.addOrder} {/* Utilise la clé du dictionnaire */}
         </motion.button>
       </div>
     </motion.div>

@@ -1,19 +1,19 @@
 "use client";
 
 import { createContext, useContext, useState, type ReactNode } from "react";
-import type { Drink } from "./drinks-data";
 
+// On utilise "any" car les données viennent de MySQL avec des noms dynamiques (ID_PRODUIT, etc.)
 export interface CartItem {
-  drink: Drink;
+  drink: any;
   quantity: number;
   notes: string;
 }
 
 interface CartContextType {
   items: CartItem[];
-  addItem: (drink: Drink, quantity: number, notes: string) => void;
-  removeItem: (drinkId: string) => void;
-  updateQuantity: (drinkId: string, quantity: number) => void;
+  addItem: (drink: any, quantity: number, notes: string) => void;
+  removeItem: (drinkId: string | number) => void;
+  updateQuantity: (drinkId: string | number, quantity: number) => void;
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
@@ -24,12 +24,14 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
 
-  const addItem = (drink: Drink, quantity: number, notes: string) => {
+  // --- AJOUTER UN PRODUIT ---
+  const addItem = (drink: any, quantity: number, notes: string) => {
     setItems((prev) => {
-      const existing = prev.find((item) => item.drink.id === drink.id);
+      // On vérifie si le produit existe via ID_PRODUIT (colonne MySQL)
+      const existing = prev.find((item) => item.drink.ID_PRODUIT === drink.ID_PRODUIT);
       if (existing) {
         return prev.map((item) =>
-          item.drink.id === drink.id
+          item.drink.ID_PRODUIT === drink.ID_PRODUIT
             ? { ...item, quantity: item.quantity + quantity, notes }
             : item
         );
@@ -38,29 +40,35 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const removeItem = (drinkId: string) => {
-    setItems((prev) => prev.filter((item) => item.drink.id !== drinkId));
+  // --- SUPPRIMER UN PRODUIT ---
+  const removeItem = (drinkId: string | number) => {
+    setItems((prev) => prev.filter((item) => item.drink.ID_PRODUIT !== drinkId));
   };
 
-  const updateQuantity = (drinkId: string, quantity: number) => {
+  // --- METTRE À JOUR LA QUANTITÉ ---
+  const updateQuantity = (drinkId: string | number, quantity: number) => {
     if (quantity <= 0) {
       removeItem(drinkId);
       return;
     }
     setItems((prev) =>
       prev.map((item) =>
-        item.drink.id === drinkId ? { ...item, quantity } : item
+        item.drink.ID_PRODUIT === drinkId ? { ...item, quantity } : item
       )
     );
   };
 
+  // --- VIDER LE PANIER ---
   const clearCart = () => setItems([]);
 
+  // --- CALCULS DU PANIER (Adapté à MySQL) ---
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce(
-    (sum, item) => sum + item.drink.price * item.quantity,
-    0
-  );
+  
+  const totalPrice = items.reduce((sum, item) => {
+    // On force le prix MySQL en nombre pour éviter les erreurs "NaN"
+    const price = parseFloat(item.drink.PRIX_PRODUITS) || 0;
+    return sum + (price * item.quantity);
+  }, 0);
 
   return (
     <CartContext.Provider

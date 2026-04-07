@@ -1036,16 +1036,16 @@
     margin-top: calc(var(--spacing) * -8);
   }
 
-  .mt-1 {
-    margin-top: calc(var(--spacing) * 1);
-  }
-
   .mt-1\.5 {
     margin-top: calc(var(--spacing) * 1.5);
   }
 
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
+  }
+
+  .mt-3 {
+    margin-top: calc(var(--spacing) * 3);
   }
 
   .mt-4 {
@@ -1255,10 +1255,6 @@
     height: calc(var(--spacing) * 2.5);
   }
 
-  .h-3 {
-    height: calc(var(--spacing) * 3);
-  }
-
   .h-3\.5 {
     height: calc(var(--spacing) * 3.5);
   }
@@ -1297,10 +1293,6 @@
 
   .h-16 {
     height: calc(var(--spacing) * 16);
-  }
-
-  .h-20 {
-    height: calc(var(--spacing) * 20);
   }
 
   .h-24 {
@@ -1439,24 +1431,16 @@
     width: calc(var(--spacing) * 9);
   }
 
-  .w-10 {
-    width: calc(var(--spacing) * 10);
-  }
-
   .w-12 {
     width: calc(var(--spacing) * 12);
   }
 
-  .w-20 {
-    width: calc(var(--spacing) * 20);
+  .w-16 {
+    width: calc(var(--spacing) * 16);
   }
 
   .w-24 {
     width: calc(var(--spacing) * 24);
-  }
-
-  .w-32 {
-    width: calc(var(--spacing) * 32);
   }
 
   .w-64 {
@@ -2024,6 +2008,10 @@
     }
   }
 
+  .border-card {
+    border-color: var(--card);
+  }
+
   .border-destructive {
     border-color: var(--destructive);
   }
@@ -2194,16 +2182,6 @@
 
   .bg-teal {
     background-color: var(--teal);
-  }
-
-  .bg-teal\/20 {
-    background-color: var(--teal);
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .bg-teal\/20 {
-      background-color: color-mix(in oklab, var(--teal) 20%, transparent);
-    }
   }
 
   .bg-teal\/30 {
@@ -2647,6 +2625,10 @@
     font-size: .8rem;
   }
 
+  .text-\[10px\] {
+    font-size: 10px;
+  }
+
   .leading-none {
     --tw-leading: 1;
     line-height: 1;
@@ -2733,10 +2715,6 @@
     color: var(--accent-foreground);
   }
 
-  .text-aqua {
-    color: var(--aqua);
-  }
-
   .text-aqua-light {
     color: var(--aqua-light);
   }
@@ -2751,16 +2729,6 @@
 
   .text-copper {
     color: var(--copper);
-  }
-
-  .text-copper\/60 {
-    color: var(--copper);
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .text-copper\/60 {
-      color: color-mix(in oklab, var(--copper) 60%, transparent);
-    }
   }
 
   .text-current {
@@ -2967,6 +2935,10 @@
     opacity: .2;
   }
 
+  .opacity-40 {
+    opacity: .4;
+  }
+
   .opacity-50 {
     opacity: .5;
   }
@@ -3027,16 +2999,6 @@
   .ring-0 {
     --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-
-  .shadow-teal\/20 {
-    --tw-shadow-color: var(--teal);
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .shadow-teal\/20 {
-      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--teal) 20%, transparent) var(--tw-shadow-alpha), transparent);
-    }
   }
 
   .shadow-teal\/30 {
@@ -3572,16 +3534,6 @@
     color: var(--muted-foreground);
   }
 
-  .placeholder\:text-navy\/40::placeholder {
-    color: var(--navy);
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .placeholder\:text-navy\/40::placeholder {
-      color: color-mix(in oklab, var(--navy) 40%, transparent);
-    }
-  }
-
   .after\:absolute:after {
     content: var(--tw-content);
     position: absolute;
@@ -3768,12 +3720,6 @@
   }
 
   @media (hover: hover) {
-    .hover\:text-destructive:hover {
-      color: var(--destructive);
-    }
-  }
-
-  @media (hover: hover) {
     .hover\:text-foreground:hover {
       color: var(--foreground);
     }
@@ -3782,6 +3728,18 @@
   @media (hover: hover) {
     .hover\:text-muted-foreground:hover {
       color: var(--muted-foreground);
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:text-navy:hover {
+      color: var(--navy);
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:text-red-600:hover {
+      color: var(--color-red-600);
     }
   }
 
@@ -3891,11 +3849,6 @@
 
   .focus\:opacity-100:focus {
     opacity: 1;
-  }
-
-  .focus\:ring-1:focus {
-    --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
   .focus\:ring-2:focus {
@@ -5093,6 +5046,12 @@
   @media (min-width: 40rem) {
     .sm\:gap-2\.5 {
       gap: calc(var(--spacing) * 2.5);
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .sm\:gap-3 {
+      gap: calc(var(--spacing) * 3);
     }
   }
 
