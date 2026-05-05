@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { categories } from "@/lib/drinks-data"; 
 import { DrinkCard } from "./drink-card";
 import { WaveDecoration } from "./wave-decoration";
-import { useLanguage } from "@/lib/language-context"; // Import du context
+import { useLanguage } from "@/lib/language-context"; 
 
 interface DrinksMenuProps {
   onSelectDrink: (drink: any) => void;
@@ -18,22 +18,28 @@ export const DrinksMenu = forwardRef<HTMLElement, DrinksMenuProps>(
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     
-    const { t } = useLanguage(); // Récupération des traductions
+    const { t } = useLanguage(); 
 
     useEffect(() => {
       setLoading(true);
       setError(null);
 
-      // On garde ton IP Tailscale/Fixe ici
-      fetch('http://192.168.112.158:8080/api.php?table=PRODUIT', {
-        method: 'GET',
-        mode: 'cors',
+      // On utilise /backend/ pour Nginx et POST pour la sécurité
+      fetch('/backend/api.php?table=produit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
         .then((res) => {
           if (!res.ok) throw new Error(`Serveur injoignable (Statut ${res.status})`);
           return res.json();
         })
         .then((data) => {
+          // L'API PHP renvoie parfois des objets d'erreur {"error": "..."}
+          if (data && data.error) {
+            throw new Error(data.error);
+          }
           if (Array.isArray(data)) {
             setDbDrinks(data);
           } else {
@@ -48,6 +54,7 @@ export const DrinksMenu = forwardRef<HTMLElement, DrinksMenuProps>(
     }, []);
 
     const displayDrinks = dbDrinks.filter((drink) => {
+      // On s'assure de matcher avec les majuscules/minuscules de la nouvelle BDD
       const bddCat = (drink.CATEGORIE || drink.categorie || "").toString().trim().toLowerCase();
       return bddCat === activeCategory.toLowerCase();
     });
@@ -58,7 +65,6 @@ export const DrinksMenu = forwardRef<HTMLElement, DrinksMenuProps>(
 
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            {/* TITRE ET SOUS-TITRE TRADUITS */}
             <h2 className="font-serif text-4xl md:text-5xl text-navy-deep mb-4">
               {t.menu.title}
             </h2>
@@ -67,7 +73,6 @@ export const DrinksMenu = forwardRef<HTMLElement, DrinksMenuProps>(
             </p>
           </div>
 
-          {/* ONGLETS TRADUITS */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
             {categories.map((cat) => (
               <button
@@ -79,8 +84,7 @@ export const DrinksMenu = forwardRef<HTMLElement, DrinksMenuProps>(
                     : "bg-white text-navy border border-border hover:bg-muted"
                 }`}
               >
-                {/* On cherche la traduction de la catégorie (ex: t.categories.softs) */}
-                {t.categories[cat.id] || cat.label}
+                {(t as any).categories?.[cat.id] || cat.label}
               </button>
             ))}
           </div>
@@ -96,7 +100,7 @@ export const DrinksMenu = forwardRef<HTMLElement, DrinksMenuProps>(
               {displayDrinks.length > 0 ? (
                 displayDrinks.map((drink, index) => (
                   <DrinkCard
-                    key={drink.ID_PRODUIT || index}
+                    key={drink.ID_PRODUIT || drink.id_produit || index}
                     drink={drink}
                     onSelect={onSelectDrink}
                     index={index}
@@ -113,7 +117,7 @@ export const DrinksMenu = forwardRef<HTMLElement, DrinksMenuProps>(
                     </div>
                   ) : (
                     <p className="text-navy/40 italic">
-                      {t.menu.noDrinks} "{t.categories[activeCategory] || activeCategory}"
+                      {t.menu.noDrinks} "{(t as any).categories?.[activeCategory] || activeCategory}"
                     </p>
                   )}
                 </div>

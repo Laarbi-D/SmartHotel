@@ -6,80 +6,302 @@
 }
 
 .analytics-kpi-card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 1.1rem 1.3rem;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.2rem 1.4rem;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.35rem;
 }
 
 .analytics-kpi-label {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: #9ca3af;
 }
 
 .analytics-kpi-value {
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 1.35rem;
+  font-weight: 700;
   color: #111827;
 }
 
-/* Bloc Grafana */
 .grafana-section {
-  margin-top: 1.5rem;
-  background: #fff;
-  border-radius: 14px;
+  background: #ffffff;
+  border-radius: 18px;
   padding: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  margin-bottom: 1.5rem;
+}
+
+.grafana-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
 }
 
 .grafana-header h2 {
-  font-size: 1rem;
-  font-weight: 600;
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
   color: #111827;
 }
 
 .grafana-header p {
-  font-size: 0.8rem;
+  margin: 0.35rem 0 0 0;
+  font-size: 0.92rem;
   color: #9ca3af;
-  margin-top: 0.25rem;
-  margin-bottom: 1rem;
 }
 
-.grafana-frame-wrapper {
-  position: relative;
-  width: 100%;
-  height: 520px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #f5f7fa;
+.analytics-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
-.grafana-frame-wrapper iframe {
-  width: 100%;
-  height: 100%;
+.action-btn {
   border: none;
+  border-radius: 12px;
+  padding: 0.82rem 1.15rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  line-height: 1;
+}
+
+.action-btn:visited {
+  color: inherit;
+}
+
+/* Groupe du haut : gestion */
+.analytics-actions--manage .action-btn {
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.10);
+  border: 1px solid transparent;
+}
+
+.add-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #ffffff;
+}
+
+.add-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  transform: translateY(-1px);
+}
+
+.delete-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #ffffff;
+}
+
+.delete-btn:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: translateY(-1px);
+}
+
+.reset-btn {
+  background: #f8fafc;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+}
+
+.reset-btn:hover {
+  background: #eef2f7;
+  transform: translateY(-1px);
+}
+
+/* Cartes Grafana */
+.grafana-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.grafana-card {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.grafana-card h3 {
+  margin: 0 0 0.9rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.grafana-card iframe {
+  width: 100%;
+  height: 420px;
+  border: none;
+  border-radius: 12px;
+  background: #e5e7eb;
+}
+
+/* Barre du bas */
+.external-links-bar {
+  position: sticky;
+  bottom: 16px;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.external-links-bar__label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+/* Groupe du bas : liens externes */
+.analytics-actions--external {
+  justify-content: flex-end;
+}
+
+.analytics-actions--external .action-btn {
+  min-width: 150px;
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.10);
+}
+
+.grafana-btn {
+  background: #f97316;
+  color: #ffffff !important;
+}
+
+.grafana-btn:hover {
+  background: #ea580c;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(249, 115, 22, 0.30);
+}
+
+.grafana-btn:visited,
+.grafana-btn:focus,
+.grafana-btn:active {
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+.display-btn {
+  background: #16a34a;
+  color: #ffffff !important;
+}
+
+.display-btn:hover {
+  background: #15803d;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(22, 163, 74, 0.30);
+}
+
+.display-btn:visited,
+.display-btn:focus,
+.display-btn:active {
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+.database-btn {
+  background: #7c3aed;
+  color: #ffffff !important;
+}
+
+.database-btn:hover {
+  background: #6d28d9;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(124, 58, 237, 0.30);
+}
+
+.database-btn:visited,
+.database-btn:focus,
+.database-btn:active {
+  color: #ffffff !important;
+  text-decoration: none;
 }
 
 /* Dark mode */
 html.dark .analytics-kpi-card,
 html.dark .grafana-section {
-  background: #1a1d27;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.35);
-}
-
-html.dark .analytics-kpi-label,
-html.dark .grafana-header p {
-  color: #9ca3af;
+  background: #111827;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 html.dark .analytics-kpi-value,
-html.dark .grafana-header h2 {
-  color: #e5e7eb;
+html.dark .grafana-header h2,
+html.dark .grafana-card h3 {
+  color: #f9fafb;
 }
 
-html.dark .grafana-frame-wrapper {
-  background: #111827;
+html.dark .analytics-kpi-label,
+html.dark .grafana-header p,
+html.dark .external-links-bar__label {
+  color: #9ca3af;
+}
+
+html.dark .grafana-card {
+  background: #1f2937;
+}
+
+html.dark .reset-btn {
+  background: #374151;
+  color: #f9fafb;
+  border-color: #4b5563;
+}
+
+html.dark .reset-btn:hover {
+  background: #4b5563;
+}
+
+html.dark .external-links-bar {
+  background: rgba(17, 24, 39, 0.92);
+  border-color: #374151;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+  .analytics-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .grafana-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .grafana-card iframe {
+    height: 360px;
+  }
+
+  .external-links-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .analytics-actions--external {
+    justify-content: stretch;
+  }
+
+  .analytics-actions--external .action-btn {
+    width: 100%;
+  }
 }

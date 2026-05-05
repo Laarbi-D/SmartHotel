@@ -759,7 +759,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/render/components/motion/proxy.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/image.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/plus.js [app-ssr] (ecmascript) <export default as Plus>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/language-context.tsx [app-ssr] (ecmascript)"); // Import du context
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/language-context.tsx [app-ssr] (ecmascript)");
 "use client";
 ;
 ;
@@ -767,7 +767,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2
 ;
 ;
 function DrinkCard({ drink, onSelect, index }) {
-    const { t } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useLanguage"])(); // On récupère les traductions
+    const { t } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useLanguage"])();
+    // CORRECTION 1 : PRIX_PRODUITS devient PRIX_PRODUIT
+    const displayPrice = drink.PRIX_PRODUIT ? parseFloat(drink.PRIX_PRODUIT).toFixed(2) : "0.00";
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
         initial: {
             opacity: 0,
@@ -790,26 +792,26 @@ function DrinkCard({ drink, onSelect, index }) {
                 className: "relative aspect-[4/3] overflow-hidden",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                        src: drink.LIEN_IMAGE_PRODUIT || "/placeholder.svg",
-                        alt: drink.LIBELLE_PRODUITS || "Drink image",
+                        src: drink.IMAGE_PRODUIT || "/placeholder.svg",
+                        alt: drink.LIBELLE_PRODUIT || "SmartHotel Drink",
                         fill: true,
                         className: "object-cover transition-transform duration-500 group-hover:scale-105"
                     }, void 0, false, {
                         fileName: "[project]/components/drink-card.tsx",
-                        lineNumber: 27,
+                        lineNumber: 33,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent"
                     }, void 0, false, {
                         fileName: "[project]/components/drink-card.tsx",
-                        lineNumber: 33,
+                        lineNumber: 39,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/drink-card.tsx",
-                lineNumber: 26,
+                lineNumber: 31,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -819,36 +821,36 @@ function DrinkCard({ drink, onSelect, index }) {
                         className: "flex items-start justify-between gap-3 mb-2",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                className: "font-serif text-xl text-navy-deep",
-                                children: drink.LIBELLE_PRODUITS
+                                className: "font-serif text-xl text-navy-deep line-clamp-1",
+                                children: drink.LIBELLE_PRODUIT
                             }, void 0, false, {
                                 fileName: "[project]/components/drink-card.tsx",
-                                lineNumber: 39,
+                                lineNumber: 46,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "text-teal font-semibold text-lg",
+                                className: "text-teal font-semibold text-lg whitespace-nowrap",
                                 children: [
                                     "€",
-                                    drink.PRIX_PRODUITS
+                                    displayPrice
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/drink-card.tsx",
-                                lineNumber: 42,
+                                lineNumber: 49,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/drink-card.tsx",
-                        lineNumber: 38,
+                        lineNumber: 44,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        className: "text-navy/60 text-sm leading-relaxed mb-4 line-clamp-2",
-                        children: drink.DESCRIPTION_PRODUIT
+                        className: "text-navy/60 text-sm leading-relaxed mb-4 line-clamp-2 min-h-[2.5rem]",
+                        children: drink.BIO
                     }, void 0, false, {
                         fileName: "[project]/components/drink-card.tsx",
-                        lineNumber: 48,
+                        lineNumber: 56,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -865,27 +867,26 @@ function DrinkCard({ drink, onSelect, index }) {
                                 className: "w-4 h-4"
                             }, void 0, false, {
                                 fileName: "[project]/components/drink-card.tsx",
-                                lineNumber: 59,
+                                lineNumber: 67,
                                 columnNumber: 11
                             }, this),
-                            t.cart.addOrder,
-                            " "
+                            t.cart?.addOrder || "Commander"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/drink-card.tsx",
-                        lineNumber: 53,
+                        lineNumber: 61,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/drink-card.tsx",
-                lineNumber: 36,
+                lineNumber: 42,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/drink-card.tsx",
-        lineNumber: 18,
+        lineNumber: 23,
         columnNumber: 5
     }, this);
 }
@@ -904,7 +905,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$mo
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$drinks$2d$data$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/drinks-data.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$drink$2d$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/drink-card.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$wave$2d$decoration$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/wave-decoration.tsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/language-context.tsx [app-ssr] (ecmascript)"); // Import du context
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/language-context.tsx [app-ssr] (ecmascript)");
 "use client";
 ;
 ;
@@ -918,18 +919,24 @@ const DrinksMenu = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$
     const [dbDrinks, setDbDrinks] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(true);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
-    const { t } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useLanguage"])(); // Récupération des traductions
+    const { t } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useLanguage"])();
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         setLoading(true);
         setError(null);
-        // On garde ton IP Tailscale/Fixe ici
-        fetch('http://192.168.112.158:8080/api.php?table=PRODUIT', {
-            method: 'GET',
-            mode: 'cors'
+        // On utilise /backend/ pour Nginx et POST pour la sécurité
+        fetch('/backend/api.php?table=produit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }).then((res)=>{
             if (!res.ok) throw new Error(`Serveur injoignable (Statut ${res.status})`);
             return res.json();
         }).then((data)=>{
+            // L'API PHP renvoie parfois des objets d'erreur {"error": "..."}
+            if (data && data.error) {
+                throw new Error(data.error);
+            }
             if (Array.isArray(data)) {
                 setDbDrinks(data);
             } else {
@@ -941,6 +948,7 @@ const DrinksMenu = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$
         }).finally(()=>setLoading(false));
     }, []);
     const displayDrinks = dbDrinks.filter((drink)=>{
+        // On s'assure de matcher avec les majuscules/minuscules de la nouvelle BDD
         const bddCat = (drink.CATEGORIE || drink.categorie || "").toString().trim().toLowerCase();
         return bddCat === activeCategory.toLowerCase();
     });
@@ -952,7 +960,7 @@ const DrinksMenu = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$
                 className: "absolute top-0 left-0 right-0 -translate-y-full rotate-180"
             }, void 0, false, {
                 fileName: "[project]/components/drinks-menu.tsx",
-                lineNumber: 57,
+                lineNumber: 64,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -966,7 +974,7 @@ const DrinksMenu = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$
                                 children: t.menu.title
                             }, void 0, false, {
                                 fileName: "[project]/components/drinks-menu.tsx",
-                                lineNumber: 62,
+                                lineNumber: 68,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -974,13 +982,13 @@ const DrinksMenu = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$
                                 children: t.menu.subtitle
                             }, void 0, false, {
                                 fileName: "[project]/components/drinks-menu.tsx",
-                                lineNumber: 65,
+                                lineNumber: 71,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/drinks-menu.tsx",
-                        lineNumber: 60,
+                        lineNumber: 67,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -988,15 +996,15 @@ const DrinksMenu = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$
                         children: __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$drinks$2d$data$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["categories"].map((cat)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 onClick: ()=>setActiveCategory(cat.id),
                                 className: `px-6 py-3 rounded-full font-medium transition-all ${activeCategory === cat.id ? "bg-teal text-white shadow-lg" : "bg-white text-navy border border-border hover:bg-muted"}`,
-                                children: t.categories[cat.id] || cat.label
+                                children: t.categories?.[cat.id] || cat.label
                             }, cat.id, false, {
                                 fileName: "[project]/components/drinks-menu.tsx",
-                                lineNumber: 73,
+                                lineNumber: 78,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/components/drinks-menu.tsx",
-                        lineNumber: 71,
+                        lineNumber: 76,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -1016,9 +1024,9 @@ const DrinksMenu = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$
                                     drink: drink,
                                     onSelect: onSelectDrink,
                                     index: index
-                                }, drink.ID_PRODUIT || index, false, {
+                                }, drink.ID_PRODUIT || drink.id_produit || index, false, {
                                     fileName: "[project]/components/drinks-menu.tsx",
-                                    lineNumber: 98,
+                                    lineNumber: 102,
                                     columnNumber: 19
                                 }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "col-span-full text-center py-20 border-2 border-dashed border-border rounded-3xl",
@@ -1027,7 +1035,7 @@ const DrinksMenu = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$
                                     children: t.menu.loading
                                 }, void 0, false, {
                                     fileName: "[project]/components/drinks-menu.tsx",
-                                    lineNumber: 108,
+                                    lineNumber: 112,
                                     columnNumber: 21
                                 }, this) : error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "text-red-500",
@@ -1037,7 +1045,7 @@ const DrinksMenu = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$
                                             children: t.menu.error
                                         }, void 0, false, {
                                             fileName: "[project]/components/drinks-menu.tsx",
-                                            lineNumber: 111,
+                                            lineNumber: 115,
                                             columnNumber: 23
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1045,52 +1053,52 @@ const DrinksMenu = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$
                                             children: error
                                         }, void 0, false, {
                                             fileName: "[project]/components/drinks-menu.tsx",
-                                            lineNumber: 112,
+                                            lineNumber: 116,
                                             columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/drinks-menu.tsx",
-                                    lineNumber: 110,
+                                    lineNumber: 114,
                                     columnNumber: 21
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     className: "text-navy/40 italic",
                                     children: [
                                         t.menu.noDrinks,
                                         ' "',
-                                        t.categories[activeCategory] || activeCategory,
+                                        t.categories?.[activeCategory] || activeCategory,
                                         '"'
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/drinks-menu.tsx",
-                                    lineNumber: 115,
+                                    lineNumber: 119,
                                     columnNumber: 21
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/drinks-menu.tsx",
-                                lineNumber: 106,
+                                lineNumber: 110,
                                 columnNumber: 17
                             }, this)
                         }, activeCategory, false, {
                             fileName: "[project]/components/drinks-menu.tsx",
-                            lineNumber: 89,
+                            lineNumber: 93,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/drinks-menu.tsx",
-                        lineNumber: 88,
+                        lineNumber: 92,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/drinks-menu.tsx",
-                lineNumber: 59,
+                lineNumber: 66,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/drinks-menu.tsx",
-        lineNumber: 56,
+        lineNumber: 63,
         columnNumber: 7
     }, this);
 });
@@ -1111,7 +1119,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$minus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Minus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/minus.js [app-ssr] (ecmascript) <export default as Minus>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/plus.js [app-ssr] (ecmascript) <export default as Plus>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$cart$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/cart-context.tsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/language-context.tsx [app-ssr] (ecmascript)"); // Import du context
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/language-context.tsx [app-ssr] (ecmascript)");
 "use client";
 ;
 ;
@@ -1124,7 +1132,9 @@ function DrinkDetailModal({ drink, isOpen, onClose }) {
     const [quantity, setQuantity] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(1);
     const [notes, setNotes] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const { addItem } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$cart$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCart"])();
-    const { t } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useLanguage"])(); // Récupération des traductions
+    const { t } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useLanguage"])();
+    // Conversion du prix en nombre pour éviter les erreurs de calcul (au cas où la BDD renvoie un string)
+    const price = drink ? parseFloat(drink.PRIX_PRODUITS) : 0;
     const handleAddToOrder = ()=>{
         if (drink) {
             addItem(drink, quantity, notes);
@@ -1155,7 +1165,7 @@ function DrinkDetailModal({ drink, isOpen, onClose }) {
                     className: "fixed inset-0 z-50 bg-navy-deep/70 backdrop-blur-sm"
                 }, void 0, false, {
                     fileName: "[project]/components/drink-detail-modal.tsx",
-                    lineNumber: 42,
+                    lineNumber: 44,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1190,12 +1200,12 @@ function DrinkDetailModal({ drink, isOpen, onClose }) {
                                     className: "w-5 h-5 text-navy-deep"
                                 }, void 0, false, {
                                     fileName: "[project]/components/drink-detail-modal.tsx",
-                                    lineNumber: 64,
+                                    lineNumber: 65,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/drink-detail-modal.tsx",
-                                lineNumber: 60,
+                                lineNumber: 61,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1203,19 +1213,20 @@ function DrinkDetailModal({ drink, isOpen, onClose }) {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                                         src: drink.LIEN_IMAGE_PRODUIT || "/placeholder.svg",
-                                        alt: drink.LIBELLE_PRODUITS || "Drink image",
+                                        alt: drink.LIBELLE_PRODUITS || "SmartHotel Drink",
                                         fill: true,
-                                        className: "object-cover"
+                                        className: "object-cover",
+                                        priority: true
                                     }, void 0, false, {
                                         fileName: "[project]/components/drink-detail-modal.tsx",
                                         lineNumber: 69,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent"
+                                        className: "absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"
                                     }, void 0, false, {
                                         fileName: "[project]/components/drink-detail-modal.tsx",
-                                        lineNumber: 75,
+                                        lineNumber: 76,
                                         columnNumber: 17
                                     }, this)
                                 ]
@@ -1242,11 +1253,11 @@ function DrinkDetailModal({ drink, isOpen, onClose }) {
                                                 className: "text-teal font-semibold text-2xl",
                                                 children: [
                                                     "€",
-                                                    drink.PRIX_PRODUITS
+                                                    price.toFixed(2)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/drink-detail-modal.tsx",
-                                                lineNumber: 82,
+                                                lineNumber: 84,
                                                 columnNumber: 19
                                             }, this)
                                         ]
@@ -1260,18 +1271,18 @@ function DrinkDetailModal({ drink, isOpen, onClose }) {
                                         children: drink.DESCRIPTION_PRODUIT
                                     }, void 0, false, {
                                         fileName: "[project]/components/drink-detail-modal.tsx",
-                                        lineNumber: 85,
+                                        lineNumber: 89,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "mb-6",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                className: "block text-sm text-navy/60 mb-3 font-medium",
+                                                className: "block text-sm text-navy/60 mb-3 font-medium uppercase tracking-wider",
                                                 children: t.common.quantity
                                             }, void 0, false, {
                                                 fileName: "[project]/components/drink-detail-modal.tsx",
-                                                lineNumber: 91,
+                                                lineNumber: 94,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1279,20 +1290,20 @@ function DrinkDetailModal({ drink, isOpen, onClose }) {
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
                                                         whileTap: {
-                                                            scale: 0.95
+                                                            scale: 0.9
                                                         },
                                                         onClick: ()=>setQuantity(Math.max(1, quantity - 1)),
-                                                        className: "w-12 h-12 rounded-xl bg-muted flex items-center justify-center border border-border",
+                                                        className: "w-12 h-12 rounded-xl bg-muted flex items-center justify-center border border-border hover:bg-border transition-colors",
                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$minus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Minus$3e$__["Minus"], {
                                                             className: "w-5 h-5 text-navy-deep"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/drink-detail-modal.tsx",
-                                                            lineNumber: 100,
+                                                            lineNumber: 103,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/drink-detail-modal.tsx",
-                                                        lineNumber: 95,
+                                                        lineNumber: 98,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1300,85 +1311,84 @@ function DrinkDetailModal({ drink, isOpen, onClose }) {
                                                         children: quantity
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/drink-detail-modal.tsx",
-                                                        lineNumber: 103,
+                                                        lineNumber: 106,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
                                                         whileTap: {
-                                                            scale: 0.95
+                                                            scale: 0.9
                                                         },
                                                         onClick: ()=>setQuantity(quantity + 1),
-                                                        className: "w-12 h-12 rounded-xl bg-muted flex items-center justify-center border border-border",
+                                                        className: "w-12 h-12 rounded-xl bg-muted flex items-center justify-center border border-border hover:bg-border transition-colors",
                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
                                                             className: "w-5 h-5 text-navy-deep"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/drink-detail-modal.tsx",
-                                                            lineNumber: 112,
+                                                            lineNumber: 115,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/drink-detail-modal.tsx",
-                                                        lineNumber: 107,
+                                                        lineNumber: 110,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/drink-detail-modal.tsx",
-                                                lineNumber: 94,
+                                                lineNumber: 97,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/drink-detail-modal.tsx",
-                                        lineNumber: 90,
+                                        lineNumber: 93,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "mb-8",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                className: "block text-sm text-navy/60 mb-3 font-medium",
+                                                className: "block text-sm text-navy/60 mb-3 font-medium uppercase tracking-wider",
                                                 children: t.cart.specialRequests
                                             }, void 0, false, {
                                                 fileName: "[project]/components/drink-detail-modal.tsx",
-                                                lineNumber: 119,
+                                                lineNumber: 121,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
                                                 value: notes,
                                                 onChange: (e)=>setNotes(e.target.value),
                                                 placeholder: t.cart.specialPlaceholder,
-                                                className: "w-full px-4 py-3 bg-muted rounded-xl text-navy-deep border border-border focus:border-teal outline-none transition-all",
+                                                className: "w-full px-4 py-3 bg-muted rounded-xl text-navy-deep border border-border focus:border-teal outline-none transition-all resize-none",
                                                 rows: 2
                                             }, void 0, false, {
                                                 fileName: "[project]/components/drink-detail-modal.tsx",
-                                                lineNumber: 122,
+                                                lineNumber: 124,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/drink-detail-modal.tsx",
-                                        lineNumber: 118,
+                                        lineNumber: 120,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
                                         whileHover: {
-                                            scale: 1.01,
-                                            y: -2
+                                            scale: 1.02
                                         },
                                         whileTap: {
-                                            scale: 0.99
+                                            scale: 0.98
                                         },
                                         onClick: handleAddToOrder,
-                                        className: "w-full py-4 bg-teal text-white font-semibold rounded-2xl text-lg shadow-lg hover:bg-teal-light transition-all",
+                                        className: "w-full py-4 bg-teal text-white font-semibold rounded-2xl text-lg shadow-lg hover:bg-teal-light transition-all flex justify-center items-center gap-2",
                                         children: [
                                             t.cart.addOrder,
                                             " · €",
-                                            (drink.PRIX_PRODUITS * quantity).toFixed(2)
+                                            (price * quantity).toFixed(2)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/drink-detail-modal.tsx",
-                                        lineNumber: 132,
+                                        lineNumber: 133,
                                         columnNumber: 17
                                     }, this)
                                 ]
@@ -1390,19 +1400,19 @@ function DrinkDetailModal({ drink, isOpen, onClose }) {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/drink-detail-modal.tsx",
-                        lineNumber: 58,
+                        lineNumber: 59,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/drink-detail-modal.tsx",
-                    lineNumber: 51,
+                    lineNumber: 52,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true)
     }, void 0, false, {
         fileName: "[project]/components/drink-detail-modal.tsx",
-        lineNumber: 38,
+        lineNumber: 41,
         columnNumber: 5
     }, this);
 }
@@ -2002,7 +2012,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/render/components/motion/proxy.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/image.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$auth$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/auth-context.tsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/language-context.tsx [app-ssr] (ecmascript)"); // Import du context
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/language-context.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$wave$2d$decoration$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/wave-decoration.tsx [app-ssr] (ecmascript)");
 "use client";
 ;
@@ -2016,32 +2026,45 @@ function LoginScreen() {
     const [name, setName] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [roomNumber, setRoomNumber] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
+    const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const { login } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$auth$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAuth"])();
-    const { t } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useLanguage"])(); // Récupération des traductions
+    const { t } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$language$2d$context$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useLanguage"])();
     const handleSubmit = async (e)=>{
         e.preventDefault();
         setError("");
-        // Validation avec messages traduits
-        if (!name.trim()) {
-            setError(t.auth.errorName);
-            return;
-        }
-        if (!roomNumber.trim()) {
-            setError(t.auth.errorRoom);
+        setIsLoading(true);
+        if (!name.trim() || !roomNumber.trim()) {
+            setError(t.auth.errorName || "Veuillez remplir tous les champs");
+            setIsLoading(false);
             return;
         }
         try {
-            const response = await fetch(`http://192.168.112.158:8080/api.php?table=UTILISATEUR`);
-            const users = await response.json();
-            const userFound = users.find((u)=>u.NOM.toLowerCase() === name.trim().toLowerCase() && u.NUMERO_CHAMBRE.toString() === roomNumber.trim());
-            if (userFound) {
-                login(name.trim(), roomNumber.trim());
+            /**
+       * CORRECTION ICI :
+       * On retire "http://192.168.112.158:8080".
+       * En utilisant "/admin/auth.php", le navigateur utilise automatiquement 
+       * l'adresse actuelle (https://192.168.112.158) pour envoyer la requête.
+       */ const response = await fetch(`/admin/auth.php`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nom: name.trim(),
+                    chambre: roomNumber.trim()
+                })
+            });
+            const result = await response.json();
+            if (response.ok && result.status === "success") {
+                await login(name.trim(), roomNumber.trim());
             } else {
-                setError(t.auth.errorNotFound);
+                setError(result.message || t.auth.errorNotFound);
             }
         } catch (err) {
-            console.error("Database connection error:", err);
-            setError(t.auth.errorServer);
+            console.error("Erreur technique :", err);
+            setError(t.auth.errorServer || "Erreur de connexion au serveur.");
+        } finally{
+            setIsLoading(false);
         }
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2052,38 +2075,38 @@ function LoginScreen() {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                         src: "/images/imagehotel.png",
-                        alt: "Luxury poolside",
+                        alt: "Luxury hotel",
                         fill: true,
                         className: "object-cover",
                         priority: true
                     }, void 0, false, {
                         fileName: "[project]/components/login-screen.tsx",
-                        lineNumber: 57,
+                        lineNumber: 66,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "absolute inset-0 bg-gradient-to-b from-navy-deep/60 via-navy-deep/50 to-navy-deep/70"
                     }, void 0, false, {
                         fileName: "[project]/components/login-screen.tsx",
-                        lineNumber: 64,
+                        lineNumber: 73,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/login-screen.tsx",
-                lineNumber: 56,
+                lineNumber: 65,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute bottom-0 left-0 right-0 opacity-20",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$wave$2d$decoration$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["WaveDecoration"], {}, void 0, false, {
                     fileName: "[project]/components/login-screen.tsx",
-                    lineNumber: 68,
+                    lineNumber: 77,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/login-screen.tsx",
-                lineNumber: 67,
+                lineNumber: 76,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -2099,22 +2122,22 @@ function LoginScreen() {
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "bg-white/95 backdrop-blur-xl rounded-3xl p-8 md:p-10 shadow-2xl border border-white/50",
                     children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "flex justify-center mb-8",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                                 src: "/images/logobarcelo.png",
-                                alt: "Logo",
+                                alt: "Barcelo",
                                 width: 180,
                                 height: 120,
                                 className: "object-contain"
                             }, void 0, false, {
                                 fileName: "[project]/components/login-screen.tsx",
-                                lineNumber: 79,
+                                lineNumber: 87,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/login-screen.tsx",
-                            lineNumber: 78,
+                            lineNumber: 86,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2125,7 +2148,7 @@ function LoginScreen() {
                                     children: t.auth.welcome
                                 }, void 0, false, {
                                     fileName: "[project]/components/login-screen.tsx",
-                                    lineNumber: 90,
+                                    lineNumber: 97,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2133,13 +2156,13 @@ function LoginScreen() {
                                     children: t.auth.instruction
                                 }, void 0, false, {
                                     fileName: "[project]/components/login-screen.tsx",
-                                    lineNumber: 93,
+                                    lineNumber: 100,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/login-screen.tsx",
-                            lineNumber: 89,
+                            lineNumber: 96,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -2154,24 +2177,25 @@ function LoginScreen() {
                                             children: t.auth.labelName
                                         }, void 0, false, {
                                             fileName: "[project]/components/login-screen.tsx",
-                                            lineNumber: 100,
+                                            lineNumber: 107,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                             type: "text",
                                             value: name,
+                                            disabled: isLoading,
                                             onChange: (e)=>setName(e.target.value),
-                                            placeholder: t.auth.placeholderName,
-                                            className: "w-full px-5 py-4 bg-muted border border-border rounded-2xl text-navy-deep focus:ring-2 focus:ring-teal/50 transition-all text-lg outline-none"
+                                            placeholder: "Prénom Nom",
+                                            className: "w-full px-5 py-4 bg-muted border border-border rounded-2xl text-navy-deep focus:ring-2 focus:ring-teal/50 transition-all text-lg outline-none disabled:opacity-50"
                                         }, void 0, false, {
                                             fileName: "[project]/components/login-screen.tsx",
-                                            lineNumber: 103,
+                                            lineNumber: 110,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/login-screen.tsx",
-                                    lineNumber: 99,
+                                    lineNumber: 106,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2182,24 +2206,25 @@ function LoginScreen() {
                                             children: t.auth.labelRoom
                                         }, void 0, false, {
                                             fileName: "[project]/components/login-screen.tsx",
-                                            lineNumber: 113,
+                                            lineNumber: 121,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                             type: "text",
                                             value: roomNumber,
+                                            disabled: isLoading,
                                             onChange: (e)=>setRoomNumber(e.target.value),
                                             placeholder: t.auth.placeholderRoom,
-                                            className: "w-full px-5 py-4 bg-muted border border-border rounded-2xl text-navy-deep focus:ring-2 focus:ring-teal/50 transition-all text-lg outline-none"
+                                            className: "w-full px-5 py-4 bg-muted border border-border rounded-2xl text-navy-deep focus:ring-2 focus:ring-teal/50 transition-all text-lg outline-none disabled:opacity-50"
                                         }, void 0, false, {
                                             fileName: "[project]/components/login-screen.tsx",
-                                            lineNumber: 116,
+                                            lineNumber: 124,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/login-screen.tsx",
-                                    lineNumber: 112,
+                                    lineNumber: 120,
                                     columnNumber: 13
                                 }, this),
                                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].p, {
@@ -2209,32 +2234,33 @@ function LoginScreen() {
                                     animate: {
                                         opacity: 1
                                     },
-                                    className: "text-red-400 text-sm text-center font-medium",
+                                    className: "text-red-500 text-sm text-center font-medium bg-red-50 py-2 rounded-lg border border-red-100",
                                     children: error
                                 }, void 0, false, {
                                     fileName: "[project]/components/login-screen.tsx",
-                                    lineNumber: 126,
+                                    lineNumber: 135,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
                                     type: "submit",
-                                    whileHover: {
+                                    disabled: isLoading,
+                                    whileHover: !isLoading ? {
                                         scale: 1.02
-                                    },
-                                    whileTap: {
+                                    } : {},
+                                    whileTap: !isLoading ? {
                                         scale: 0.98
-                                    },
-                                    className: "w-full py-4 bg-teal text-white font-medium rounded-full text-lg shadow-lg hover:bg-teal-light transition-all mt-6",
-                                    children: t.auth.button
+                                    } : {},
+                                    className: "w-full py-4 bg-teal text-white font-medium rounded-full text-lg shadow-lg hover:bg-teal-light transition-all mt-6 disabled:bg-gray-400",
+                                    children: isLoading ? "Vérification..." : t.auth.button
                                 }, void 0, false, {
                                     fileName: "[project]/components/login-screen.tsx",
-                                    lineNumber: 131,
+                                    lineNumber: 144,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/login-screen.tsx",
-                            lineNumber: 98,
+                            lineNumber: 105,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2242,24 +2268,24 @@ function LoginScreen() {
                             children: t.auth.assistance
                         }, void 0, false, {
                             fileName: "[project]/components/login-screen.tsx",
-                            lineNumber: 141,
+                            lineNumber: 155,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/login-screen.tsx",
-                    lineNumber: 76,
+                    lineNumber: 85,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/login-screen.tsx",
-                lineNumber: 71,
+                lineNumber: 80,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/login-screen.tsx",
-        lineNumber: 55,
+        lineNumber: 64,
         columnNumber: 5
     }, this);
 }

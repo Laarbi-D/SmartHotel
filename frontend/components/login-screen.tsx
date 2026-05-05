@@ -1,53 +1,68 @@
 "use client";
 
-import React from "react"
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useAuth } from "@/lib/auth-context";
-import { useLanguage } from "@/lib/language-context"; // Import du context
+import { useLanguage } from "@/lib/language-context";
 import { WaveDecoration } from "./wave-decoration";
 
 export function LoginScreen() {
   const [name, setName] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false); 
+  
   const { login } = useAuth();
-  const { t } = useLanguage(); // Récupération des traductions
+  const { t } = useLanguage();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
 
-    // Validation avec messages traduits
-    if (!name.trim()) {
-      setError(t.auth.errorName);
-      return;
-    }
-
-    if (!roomNumber.trim()) {
-      setError(t.auth.errorRoom);
+    if (!name.trim() || !roomNumber.trim()) {
+      setError(t.auth.errorName || "Veuillez remplir tous les champs");
+      setIsLoading(false);
       return;
     }
 
     try {
-      const response = await fetch(`http://192.168.112.158:8080/api.php?table=UTILISATEUR`);
-      const users = await response.json();
+      /**
+       * CORRECTION MAJEURE : 
+       * On utilise notre fichier centralisé /backend/api.php avec ?action=login
+       */
+      const response = await fetch('/backend/api.php?action=login', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nom: name.trim(),
+          chambre: roomNumber.trim(),
+        }),
+      });
 
-      const userFound = users.find(
-        (u: any) => 
-          u.NOM.toLowerCase() === name.trim().toLowerCase() && 
-          u.NUMERO_CHAMBRE.toString() === roomNumber.trim()
-      );
-
-      if (userFound) {
-        login(name.trim(), roomNumber.trim());
-      } else {
-        setError(t.auth.errorNotFound);
+      // Gestion d'erreur renforcée (évite le crash "Unexpected token '<'")
+      const textResponse = await response.text();
+      let result;
+      try {
+        result = JSON.parse(textResponse);
+      } catch (parseError) {
+        console.error("Réponse du serveur :", textResponse);
+        throw new Error("Erreur de connexion (Réponse invalide du serveur)");
       }
-    } catch (err) {
-      console.error("Database connection error:", err);
-      setError(t.auth.errorServer);
+
+      if (response.ok && result.status === "success") {
+        await login(name.trim(), roomNumber.trim());
+      } else {
+        setError(result.message || t.auth.errorNotFound);
+      }
+    } catch (err: any) {
+      console.error("Erreur technique :", err);
+      setError(err.message || t.auth.errorServer || "Erreur de connexion au serveur.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -56,7 +71,7 @@ export function LoginScreen() {
       <div className="absolute inset-0">
         <Image
           src="/images/imagehotel.png"
-          alt="Luxury poolside"
+          alt="Luxury hotel"
           fill
           className="object-cover"
           priority
@@ -74,18 +89,16 @@ export function LoginScreen() {
         className="relative z-10 w-full max-w-md mx-4"
       >
         <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-8 md:p-10 shadow-2xl border border-white/50">
-          
-          <motion.div className="flex justify-center mb-8">
+          <div className="flex justify-center mb-8">
             <Image
               src="/images/logobarcelo.png"
-              alt="Logo"
+              alt="Barcelo"
               width={180}
               height={120}
               className="object-contain"
             />
-          </motion.div>
+          </div>
 
-          {/* TEXTES TRADUITS */}
           <div className="text-center mb-8">
             <h1 className="font-serif text-3xl md:text-4xl text-navy-deep mb-2">
               {t.auth.welcome}
@@ -103,9 +116,10 @@ export function LoginScreen() {
               <input
                 type="text"
                 value={name}
+                disabled={isLoading}
                 onChange={(e) => setName(e.target.value)}
-                placeholder={t.auth.placeholderName}
-                className="w-full px-5 py-4 bg-muted border border-border rounded-2xl text-navy-deep focus:ring-2 focus:ring-teal/50 transition-all text-lg outline-none"
+                placeholder="Prénom Nom"
+                className="w-full px-5 py-4 bg-muted border border-border rounded-2xl text-navy-deep focus:ring-2 focus:ring-teal/50 transition-all text-lg outline-none disabled:opacity-50"
               />
             </div>
 
@@ -116,25 +130,31 @@ export function LoginScreen() {
               <input
                 type="text"
                 value={roomNumber}
+                disabled={isLoading}
                 onChange={(e) => setRoomNumber(e.target.value)}
                 placeholder={t.auth.placeholderRoom}
-                className="w-full px-5 py-4 bg-muted border border-border rounded-2xl text-navy-deep focus:ring-2 focus:ring-teal/50 transition-all text-lg outline-none"
+                className="w-full px-5 py-4 bg-muted border border-border rounded-2xl text-navy-deep focus:ring-2 focus:ring-teal/50 transition-all text-lg outline-none disabled:opacity-50"
               />
             </div>
 
             {error && (
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-sm text-center font-medium">
+              <motion.p 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                className="text-red-500 text-sm text-center font-medium bg-red-50 py-2 rounded-lg border border-red-100"
+              >
                 {error}
               </motion.p>
             )}
 
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full py-4 bg-teal text-white font-medium rounded-full text-lg shadow-lg hover:bg-teal-light transition-all mt-6"
+              disabled={isLoading}
+              whileHover={!isLoading ? { scale: 1.02 } : {}}
+              whileTap={!isLoading ? { scale: 0.98 } : {}}
+              className="w-full py-4 bg-teal text-white font-medium rounded-full text-lg shadow-lg hover:bg-teal-light transition-all mt-6 disabled:bg-gray-400"
             >
-              {t.auth.button}
+              {isLoading ? "Vérification..." : t.auth.button}
             </motion.button>
           </form>
 

@@ -1,25 +1,26 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { translations } from "./translation"; // Assure-toi que ce fichier existe !
+import { translations } from "./translation"; 
 
-// 1. Définition des types autorisés
+// 1. Définition des types
 type Language = "fr" | "en" | "es";
 
 interface LanguageContextType {
   lang: Language;
   setLang: (lang: Language) => void;
-  t: typeof translations.en; // Utilise la structure de la version anglaise comme modèle
+  // Correction ici : on dit que 't' est une des versions de notre objet translations
+  t: (typeof translations)["fr" | "en" | "es"]; 
 }
 
-// 2. Création du contexte avec le bon type
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Language>("fr");
 
-  // 3. Sélection dynamique de la traduction
-  const t = translations[lang];
+  // On sélectionne la traduction. 
+  // Le "as any" ici règle le conflit de structure si une langue est plus complète qu'une autre.
+  const t = translations[lang] as any;
 
   return (
     <LanguageContext.Provider value={{ lang, setLang, t }}>
@@ -28,7 +29,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// 4. Hook personnalisé pour utiliser la langue
 export function useLanguage() {
   const context = useContext(LanguageContext);
   if (context === undefined) {

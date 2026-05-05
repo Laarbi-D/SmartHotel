@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { X, Minus, Plus } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
-import { useLanguage } from "@/lib/language-context"; // Import du context
+import { useLanguage } from "@/lib/language-context"; 
 
 interface DrinkDetailModalProps {
   drink: any | null;
@@ -17,7 +17,10 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
   const [quantity, setQuantity] = useState(1);
   const [notes, setNotes] = useState("");
   const { addItem } = useCart();
-  const { t } = useLanguage(); // Récupération des traductions
+  const { t } = useLanguage(); 
+
+  // Conversion du prix en nombre pour éviter les erreurs de calcul (au cas où la BDD renvoie un string)
+  const price = drink ? parseFloat(drink.PRIX_PRODUITS) : 0;
 
   const handleAddToOrder = () => {
     if (drink) {
@@ -38,7 +41,6 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
     <AnimatePresence>
       {isOpen && drink && (
         <>
-          {/* FOND SOMBRE */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -47,7 +49,6 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
             className="fixed inset-0 z-50 bg-navy-deep/70 backdrop-blur-sm"
           />
 
-          {/* CONTENU DE LA MODALE */}
           <motion.div
             initial={{ opacity: 0, y: 100, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -64,38 +65,40 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
                 <X className="w-5 h-5 text-navy-deep" />
               </button>
 
-              {/* IMAGE */}
               <div className="relative aspect-[4/3]">
                 <Image
                   src={drink.LIEN_IMAGE_PRODUIT || "/placeholder.svg"}
-                  alt={drink.LIBELLE_PRODUITS || "Drink image"}
+                  alt={drink.LIBELLE_PRODUITS || "SmartHotel Drink"}
                   fill
                   className="object-cover"
+                  priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
               </div>
 
-              {/* INFOS PRODUIT */}
               <div className="p-6 -mt-8 relative bg-white">
                 <div className="flex items-start justify-between gap-4 mb-4">
-                  <h2 className="font-serif text-3xl text-navy-deep">{drink.LIBELLE_PRODUITS}</h2>
-                  <span className="text-teal font-semibold text-2xl">€{drink.PRIX_PRODUITS}</span>
+                  <h2 className="font-serif text-3xl text-navy-deep">
+                    {drink.LIBELLE_PRODUITS}
+                  </h2>
+                  <span className="text-teal font-semibold text-2xl">
+                    €{price.toFixed(2)}
+                  </span>
                 </div>
 
                 <p className="text-navy/60 leading-relaxed mb-6">
                   {drink.DESCRIPTION_PRODUIT}
                 </p>
 
-                {/* QUANTITÉ - TRADUIT */}
                 <div className="mb-6">
-                  <label className="block text-sm text-navy/60 mb-3 font-medium">
+                  <label className="block text-sm text-navy/60 mb-3 font-medium uppercase tracking-wider">
                     {t.common.quantity}
                   </label>
                   <div className="flex items-center gap-4">
                     <motion.button
-                      whileTap={{ scale: 0.95 }}
+                      whileTap={{ scale: 0.9 }}
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center border border-border"
+                      className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center border border-border hover:bg-border transition-colors"
                     >
                       <Minus className="w-5 h-5 text-navy-deep" />
                     </motion.button>
@@ -105,37 +108,35 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
                     </span>
 
                     <motion.button
-                      whileTap={{ scale: 0.95 }}
+                      whileTap={{ scale: 0.9 }}
                       onClick={() => setQuantity(quantity + 1)}
-                      className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center border border-border"
+                      className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center border border-border hover:bg-border transition-colors"
                     >
                       <Plus className="w-5 h-5 text-navy-deep" />
                     </motion.button>
                   </div>
                 </div>
 
-                {/* DEMANDES SPÉCIALES - TRADUIT */}
                 <div className="mb-8">
-                  <label className="block text-sm text-navy/60 mb-3 font-medium">
+                  <label className="block text-sm text-navy/60 mb-3 font-medium uppercase tracking-wider">
                     {t.cart.specialRequests}
                   </label>
                   <textarea
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder={t.cart.specialPlaceholder}
-                    className="w-full px-4 py-3 bg-muted rounded-xl text-navy-deep border border-border focus:border-teal outline-none transition-all"
+                    className="w-full px-4 py-3 bg-muted rounded-xl text-navy-deep border border-border focus:border-teal outline-none transition-all resize-none"
                     rows={2}
                   />
                 </div>
 
-                {/* BOUTON D'AJOUT - TRADUIT */}
                 <motion.button
-                  whileHover={{ scale: 1.01, y: -2 }}
-                  whileTap={{ scale: 0.99 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={handleAddToOrder}
-                  className="w-full py-4 bg-teal text-white font-semibold rounded-2xl text-lg shadow-lg hover:bg-teal-light transition-all"
+                  className="w-full py-4 bg-teal text-white font-semibold rounded-2xl text-lg shadow-lg hover:bg-teal-light transition-all flex justify-center items-center gap-2"
                 >
-                  {t.cart.addOrder} · €{(drink.PRIX_PRODUITS * quantity).toFixed(2)}
+                  {t.cart.addOrder} · €{(price * quantity).toFixed(2)}
                 </motion.button>
               </div>
             </div>

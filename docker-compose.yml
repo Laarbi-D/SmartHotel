@@ -1,13 +1,28 @@
 services:
+  # --- GATEWAY (Nginx HTTPS) ---
+  # C'est lui qui gère le SSL et redirige vers le bon service
+  gateway:
+    image: nginx:alpine
+    container_name: hotel_gateway
+    ports:
+      - "80:80"   # Redirigera vers le 443
+      - "443:443" # Le vrai port HTTPS
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - frontend
+      - php
+
   # --- BACKEND (PHP) ---
   php:
-    build: ./backend             
+    build: ./backend
     container_name: php_server
     volumes:
-      - ./backend:/var/www/html  
-    ports:
-      - "8080:80"
-      - "8082:80"
+      - ./backend:/var/www/html
+    environment:
+      TELEGRAM_BOT_TOKEN: "8525409568:AAG3saVaLLltmxPLyPKxKeeTUDefK6eldss"
+      TELEGRAM_CHAT_ID: "1601238568"
     depends_on:
       - mysql
 
@@ -17,47 +32,51 @@ services:
     container_name: mysql_server
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: smarthotelbdd     
+      MYSQL_DATABASE: smart_hotel_bdd  # <-- CORRECTION ICI : Le bon nom avec les tirets
     volumes:
       - ./mysql-data:/var/lib/mysql
       - ./mysql-init:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
 
-  # --- PHPMYADMIN ---
+  # --- FRONTEND (Next.js) ---
+  frontend:
+    build: ./frontend
+    container_name: nextjs_app
+    # On ne l'expose plus sur le port 80 directement, la gateway s'en occupe
+    expose:
+      - "3000"
+    depends_on:
+      - php
+
+  # --- PHPMYADMIN & GRAFANA (Gardés pour ton dev) ---
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: pma
     environment:
       PMA_HOST: mysql
-      PMA_USER: root             
-      PMA_PASSWORD: rootpassword 
+      PMA_USER: root
+      PMA_PASSWORD: rootpassword
     ports:
       - "8081:80"
-    depends_on:
-      - mysql
 
-  # --- FRONTEND (Next.js) ---
-  frontend: 
-    build: ./frontend
-    container_name: nextjs_app
-    ports:
-      - "80:3000"
-    depends_on:
-      - php
-
-  #  --- GRAFANA ---
   grafana:
     image: grafana/grafana:latest
     container_name: grafana_server
     ports:
-      - "3000:3000"
+      - "3400:3000" 
     volumes:
       - grafana-storage:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
-    depends_on:
-      - mysql
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_SECURITY_COOKIE_SAMESITE=disabled
+      - GF_SECURITY_COOKIE_SECURE=false
+      - GF_SERVER_ROOT_URL=http://192.168.112.158:3400
+      - GF_SERVER_DOMAIN=192.168.112.158
+      - GF_SERVER_ENFORCE_DOMAIN=false
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
     restart: unless-stopped
 
 volumes:

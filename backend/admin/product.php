@@ -1,22 +1,45 @@
+<?php
+session_start();
+
+// 1. PROTECTION SESSION
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: login.php");
+    exit;
+}
+
+// 2. CONNEXION BDD
+$host = 'mysql'; 
+$db   = 'smart_hotel_bdd'; 
+$user = 'root';
+$pass = 'rootpassword'; 
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ]);
+
+    // On récupère les colonnes exactes de ta table produit
+    $stmt = $pdo->query("SELECT ID_PRODUIT, LIBELLE_PRODUIT, PRIX_PRODUIT, IMAGE_PRODUIT, STOCK, BIO, CATEGORIE FROM produit");
+    $produits_bdd = $stmt->fetchAll();
+
+} catch (PDOException $e) {
+    die("Erreur BDD : " . $e->getMessage());
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Barcelo – Products</title>
+  <title>Barcelo – Products Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
   <link rel="stylesheet" href="product.css"/>
-  <script>
-    if (localStorage.getItem('theme') === 'dark') {
-      document.documentElement.classList.add('dark');
-    }
-  </script>
 </head>
 <body>
 
   <div class="layout">
-
     <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="sidebar__logo">
@@ -31,7 +54,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
           Orders
         </a>
-        <a href="Analytics" class="nav-item">
+        <a href="analytics.php" class="nav-item">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           Analytics
         </a>
@@ -52,100 +75,86 @@
           Help
         </a>
       </nav>
-      <a href="login.php" class="nav-item nav-item--logout" onclick="return confirm('Se déconnecter ?')">
+      <a href="login.php?action=logout" class="nav-item nav-item--logout" onclick="return confirm('Se déconnecter ?')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         Log out
       </a>
     </aside>
 
-    <!-- MAIN -->
     <div class="main-wrapper">
-
-      <!-- HEADER -->
       <header class="header">
         <div class="header__search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input type="text" id="product-search" placeholder="Search product..."/>
         </div>
-        <div class="header__actions">
-          <button class="header__icon-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          </button>
-          <button class="header__icon-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            <span class="notif-dot"></span>
-          </button>
-          <div class="header__profile">
-            <img src="https://i.pravatar.cc/32" alt="Admin"/>
-            <div>
-              <span class="profile__name">Administrator</span>
-              <span class="profile__email">administrator@gmail.com</span>
-            </div>
-          </div>
+        <div class="header__profile">
+          <span class="profile__name"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
         </div>
       </header>
 
-      <!-- CONTENT -->
       <main class="main">
         <div class="products-topbar">
-          <h1 class="dashboard-title">Products</h1>
+          <h1 class="dashboard-title">Products Management</h1>
           <button class="btn-add" id="btn-add-product">+ Add Product</button>
         </div>
 
-        <!-- FILTRES PAR CATÉGORIE -->
         <div class="category-tabs">
           <button class="tab-btn active" data-category="all">All</button>
-          <button class="tab-btn" data-category="alcoholic">Alcoholic</button>
-          <button class="tab-btn" data-category="non-alcoholic">Non-Alcoholic</button>
+          <button class="tab-btn" data-category="soft drinks">Soft Drinks</button>
+          <button class="tab-btn" data-category="cocktails">Cocktails</button>
+          <button class="tab-btn" data-category="wines">Wines</button>
+          <button class="tab-btn" data-category="beers">Beers</button>
         </div>
 
-        <!-- GRILLE PRODUITS -->
-        <div class="products-grid" id="products-grid"></div>
-
+        <div class="products-grid" id="products-grid">
+            <!-- Injection via JS -->
+        </div>
       </main>
     </div>
   </div>
 
-  <!-- MODAL AJOUT / ÉDITION -->
-  <div id="product-modal" class="modal-overlay hidden">
-    <div class="modal">
-      <div class="modal__header">
-        <h3 id="modal-title">Add Product</h3>
-        <button class="modal__close" id="modal-close">&times;</button>
-      </div>
-      <div class="modal__body">
-        <input type="hidden" id="edit-id"/>
-        <div class="form-group">
-          <label>Name</label>
-          <input type="text" id="input-name" placeholder="Product name"/>
-        </div>
-        <div class="form-group">
-          <label>Category</label>
-          <select id="input-category">
-            <option value="alcoholic">Alcoholic</option>
-            <option value="non-alcoholic">Non-Alcoholic</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Price (€)</label>
-          <input type="number" id="input-price" placeholder="0.00" step="0.01"/>
-        </div>
-        <div class="form-group">
-          <label>Stock</label>
-          <input type="number" id="input-stock" placeholder="0"/>
-        </div>
-        <div class="form-group">
-          <label>Description</label>
-          <input type="text" id="input-desc" placeholder="Short description"/>
-        </div>
-      </div>
-      <div class="modal__footer">
-        <button class="btn-cancel" id="modal-cancel">Cancel</button>
-        <button class="btn-save" id="modal-save">Save</button>
-      </div>
-    </div>
-  </div>
+  <script>
+    const dbProducts = <?php echo json_encode($produits_bdd); ?>;
+    const grid = document.getElementById('products-grid');
 
-  <script src="product.js"></script>
+    function renderProducts(filter = 'all') {
+        grid.innerHTML = '';
+        
+        dbProducts.forEach(p => {
+            if (filter !== 'all' && p.CATEGORIE !== filter) return;
+
+            const card = `
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <img src="${p.IMAGE_PRODUIT}" alt="${p.LIBELLE_PRODUIT}" class="product-img-fixed">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-header">
+                            <h3>${p.LIBELLE_PRODUIT}</h3>
+                            <span class="product-price">${parseFloat(p.PRIX_PRODUIT).toFixed(2)}€</span>
+                        </div>
+                        <p class="product-desc">${p.BIO}</p>
+                        <div class="product-footer">
+                            <span class="product-stock">Stock: <strong>${p.STOCK}</strong></span>
+                            <div class="product-actions">
+                                <button class="btn-edit" onclick="alert('ID: ' + ${p.ID_PRODUIT})">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += card;
+        });
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            renderProducts(e.target.dataset.category);
+        });
+    });
+
+    renderProducts();
+  </script>
 </body>
 </html>

@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+// Sécurisation : si l'utilisateur n'est pas connecté, on le renvoie au login
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: login.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -52,7 +61,8 @@
           Help
         </a>
       </nav>
-      <a href="login.php" class="nav-item nav-item--logout" onclick="return confirm('Se déconnecter ?')">
+      <!-- CORRECTION ICI : Redirection vers login.php avec le paramètre de déconnexion -->
+      <a href="login.php?action=logout" class="nav-item nav-item--logout" onclick="return confirm('Êtes-vous sûr de vouloir vous déconnecter ?')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         Log out
       </a>
@@ -78,7 +88,7 @@
           <div class="header__profile">
             <img src="https://i.pravatar.cc/32" alt="Admin"/>
             <div>
-              <span class="profile__name">Administrator</span>
+              <span class="profile__name"><?php echo htmlspecialchars($_SESSION['username'] ?? 'Administrator'); ?></span>
               <span class="profile__email">administrator@gmail.com</span>
             </div>
           </div>
@@ -123,7 +133,7 @@
           </div>
         </div>
 
-        <!-- ✅ RECENT ORDERS (ajout) -->
+        <!-- RECENT ORDERS -->
         <div class="chart-card" style="margin-top: 1.5rem;">
           <h2 class="chart-card__title">Recent Orders</h2>
           <table class="orders-table">

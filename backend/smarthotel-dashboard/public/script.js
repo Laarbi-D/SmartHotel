@@ -1,180 +1,200 @@
-// ============================================================
-// script.js — JavaScript du dashboard SmartHotel
-// Rôles : initialisation Chart.js, chargement historique,
-//         mise à jour des cartes, connexion WebSocket
-// ============================================================
+const ROWS = 2;
+const COLS = 12;
+const TOTAL = ROWS * COLS;
 
-// ── Seuils d'alerte (doivent correspondre à CONFIG.SEUILS dans server.js) ──
-const SEUIL_TEMP = 28;
-const SEUIL_HUMI = 60;
+let displayText = " ".repeat(TOTAL);
+let ws = null;
+let reconnectTimer = null;
 
-// ── Initialisation du graphique Chart.js ─────────────────────
+const font = {
+  " ": ["00000","00000","00000","00000","00000","00000","00000"],
+  "!": ["00100","00100","00100","00100","00100","00000","00100"],
+  "?": ["01110","10001","00001","00010","00100","00000","00100"],
+  ".": ["00000","00000","00000","00000","00000","00000","00100"],
+  ",": ["00000","00000","00000","00000","00000","00100","01000"],
+  ":": ["00000","00100","00000","00000","00100","00000","00000"],
+  ";": ["00000","00100","00000","00000","00100","01000","00000"],
+  "-": ["00000","00000","00000","01110","00000","00000","00000"],
+  "_": ["00000","00000","00000","00000","00000","00000","11111"],
+  "/": ["00001","00010","00100","01000","10000","00000","00000"],
+  "'": ["00100","00100","00000","00000","00000","00000","00000"],
+  "%": ["11001","11010","00100","01000","10110","00110","00000"],
 
-const ctx   = document.getElementById('chart').getContext('2d');
-const chart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    datasets: [
-      {
-        label           : 'Température (°C)',
-        data            : [],
-        borderColor     : '#f59e0b',
-        backgroundColor : 'rgba(245,158,11,0.08)',
-        borderWidth     : 2,
-        pointRadius     : 2,
-        pointHoverRadius: 5,
-        tension         : 0.4,
-        fill            : true,
-        yAxisID         : 'y'
-      },
-      {
-        label           : 'Humidité (%)',
-        data            : [],
-        borderColor     : '#06b6d4',
-        backgroundColor : 'rgba(6,182,212,0.08)',
-        borderWidth     : 2,
-        pointRadius     : 2,
-        pointHoverRadius: 5,
-        tension         : 0.4,
-        fill            : true,
-        yAxisID         : 'y1'
+  "0": ["01110","10001","10011","10101","11001","10001","01110"],
+  "1": ["00100","01100","00100","00100","00100","00100","01110"],
+  "2": ["01110","10001","00001","00010","00100","01000","11111"],
+  "3": ["11110","00001","00001","01110","00001","00001","11110"],
+  "4": ["00010","00110","01010","10010","11111","00010","00010"],
+  "5": ["11111","10000","10000","11110","00001","00001","11110"],
+  "6": ["01110","10000","10000","11110","10001","10001","01110"],
+  "7": ["11111","00001","00010","00100","01000","01000","01000"],
+  "8": ["01110","10001","10001","01110","10001","10001","01110"],
+  "9": ["01110","10001","10001","01111","00001","00001","01110"],
+
+  "A": ["01110","10001","10001","11111","10001","10001","10001"],
+  "B": ["11110","10001","10001","11110","10001","10001","11110"],
+  "C": ["01110","10001","10000","10000","10000","10001","01110"],
+  "D": ["11100","10010","10001","10001","10001","10010","11100"],
+  "E": ["11111","10000","10000","11110","10000","10000","11111"],
+  "F": ["11111","10000","10000","11110","10000","10000","10000"],
+  "G": ["01110","10001","10000","10111","10001","10001","01110"],
+  "H": ["10001","10001","10001","11111","10001","10001","10001"],
+  "I": ["01110","00100","00100","00100","00100","00100","01110"],
+  "J": ["00001","00001","00001","00001","10001","10001","01110"],
+  "K": ["10001","10010","10100","11000","10100","10010","10001"],
+  "L": ["10000","10000","10000","10000","10000","10000","11111"],
+  "M": ["10001","11011","10101","10101","10001","10001","10001"],
+  "N": ["10001","11001","10101","10011","10001","10001","10001"],
+  "O": ["01110","10001","10001","10001","10001","10001","01110"],
+  "P": ["11110","10001","10001","11110","10000","10000","10000"],
+  "Q": ["01110","10001","10001","10001","10101","10010","01101"],
+  "R": ["11110","10001","10001","11110","10100","10010","10001"],
+  "S": ["01111","10000","10000","01110","00001","00001","11110"],
+  "T": ["11111","00100","00100","00100","00100","00100","00100"],
+  "U": ["10001","10001","10001","10001","10001","10001","01110"],
+  "V": ["10001","10001","10001","10001","10001","01010","00100"],
+  "W": ["10001","10001","10001","10101","10101","10101","01010"],
+  "X": ["10001","10001","01010","00100","01010","10001","10001"],
+  "Y": ["10001","10001","01010","00100","00100","00100","00100"],
+  "Z": ["11111","00001","00010","00100","01000","10000","11111"],
+
+  "a": ["00000","00000","01110","00001","01111","10001","01111"],
+  "b": ["10000","10000","11110","10001","10001","10001","11110"],
+  "c": ["00000","00000","01110","10001","10000","10001","01110"],
+  "d": ["00001","00001","01111","10001","10001","10001","01111"],
+  "e": ["00000","00000","01110","10001","11111","10000","01110"],
+  "f": ["00110","01001","01000","11100","01000","01000","01000"],
+  "g": ["00000","01111","10001","10001","01111","00001","01110"],
+  "h": ["10000","10000","11110","10001","10001","10001","10001"],
+  "i": ["00100","00000","01100","00100","00100","00100","01110"],
+  "j": ["00010","00000","00110","00010","00010","10010","01100"],
+  "k": ["10000","10000","10010","10100","11000","10100","10010"],
+  "l": ["01100","00100","00100","00100","00100","00100","01110"],
+  "m": ["00000","00000","11010","10101","10101","10101","10101"],
+  "n": ["00000","00000","11110","10001","10001","10001","10001"],
+  "o": ["00000","00000","01110","10001","10001","10001","01110"],
+  "p": ["00000","00000","11110","10001","10001","11110","10000"],
+  "q": ["00000","00000","01111","10001","10001","01111","00001"],
+  "r": ["00000","00000","10110","11001","10000","10000","10000"],
+  "s": ["00000","00000","01111","10000","01110","00001","11110"],
+  "t": ["01000","01000","11100","01000","01000","01001","00110"],
+  "u": ["00000","00000","10001","10001","10001","10011","01101"],
+  "v": ["00000","00000","10001","10001","10001","01010","00100"],
+  "w": ["00000","00000","10001","10001","10101","10101","01010"],
+  "x": ["00000","00000","10001","01010","00100","01010","10001"],
+  "y": ["00000","00000","10001","10001","01111","00001","01110"],
+  "z": ["00000","00000","11111","00010","00100","01000","11111"]
+};
+
+function normalizeText(text) {
+  return [...text].map(ch => font[ch] ? ch : "?").join("");
+}
+
+function renderDisplay() {
+  const container = document.getElementById("virtualDisplay");
+  container.innerHTML = "";
+
+  for (let row = 0; row < ROWS; row++) {
+    const rowEl = document.createElement("div");
+    rowEl.className = "display-row";
+
+    for (let col = 0; col < COLS; col++) {
+      const index = row * COLS + col;
+      const char = displayText[index] || " ";
+      const glyph = font[char] || font["?"];
+
+      const charBox = document.createElement("div");
+      charBox.className = "char-box";
+
+      const matrix = document.createElement("div");
+      matrix.className = "matrix";
+
+      for (let y = 0; y < 7; y++) {
+        for (let x = 0; x < 5; x++) {
+          const led = document.createElement("div");
+          led.className = "led" + (glyph[y][x] === "1" ? " on" : "");
+          matrix.appendChild(led);
+        }
       }
-    ]
-  },
-  options: {
-    responsive         : true,
-    maintainAspectRatio: false,
-    interaction        : { mode: 'index', intersect: false },
-    plugins: {
-      legend : { display: false },
-      tooltip: {
-        backgroundColor: '#0f1520',
-        borderColor    : '#1e2d45',
-        borderWidth    : 1,
-        titleColor     : '#94a3b8',
-        bodyColor      : '#e2e8f0',
-        padding        : 12
-      }
-    },
-    scales: {
-      x: {
-        type : 'time',
-        time : { displayFormats: { hour: 'HH:mm', minute: 'HH:mm' } },
-        grid : { color: 'rgba(30,45,69,0.8)' },
-        ticks: { color: '#475569', font: { family: 'Azeret Mono', size: 10 } }
-      },
-      y: {
-        position: 'left',
-        grid    : { color: 'rgba(30,45,69,0.8)' },
-        ticks   : { color: '#f59e0b', font: { family: 'Azeret Mono', size: 10 },
-                    callback: v => v + '°C' }
-      },
-      y1: {
-        position: 'right',
-        grid    : { drawOnChartArea: false },
-        ticks   : { color: '#06b6d4', font: { family: 'Azeret Mono', size: 10 },
-                    callback: v => v + '%' }
-      }
+
+      charBox.appendChild(matrix);
+      rowEl.appendChild(charBox);
     }
-  }
-});
 
-// ── Chargement de l'historique 24h au démarrage ──────────────
-
-async function chargerHistorique() {
-  try {
-    const res  = await fetch('/api/history');
-    const data = await res.json();
-
-    chart.data.datasets[0].data = data.temperatures.map(d => ({
-      x: new Date(d.x), y: d.y
-    }));
-    chart.data.datasets[1].data = data.humidites.map(d => ({
-      x: new Date(d.x), y: d.y
-    }));
-    chart.update();
-  } catch (e) {
-    console.error('Erreur chargement historique :', e);
+    container.appendChild(rowEl);
   }
 }
 
-chargerHistorique();
-
-// ── Mise à jour des cartes capteurs ──────────────────────────
-
-function mettreAJourCarte(id, valeur, seuil, badgeId, barId) {
-  const card    = document.getElementById(id);
-  const badge   = document.getElementById(badgeId);
-  const bar     = document.getElementById(barId);
-  const valElem = document.getElementById(id === 'card-temp' ? 'val-temp' : 'val-humi');
-
-  // Mise à jour de la valeur affichée
-  valElem.textContent = valeur.toFixed(1);
-
-  // Calcul du pourcentage pour la barre (max = 2× le seuil)
-  const pct = Math.min((valeur / (seuil * 2)) * 100, 100);
-  bar.style.width = pct + '%';
-
-  // Bascule alerte / normal
-  const enAlerte = valeur > seuil;
-  card.classList.toggle('alerte', enAlerte);
-  badge.classList.toggle('alerte',  enAlerte);
-  badge.classList.toggle('normal', !enAlerte);
-  badge.querySelector('span:last-child').textContent = enAlerte ? 'Alerte' : 'Normal';
+function updateClock(dateValue = null) {
+  const date = dateValue ? new Date(dateValue) : new Date();
+  document.getElementById("lastUpdate").textContent =
+    "Dernière mise à jour : " + date.toLocaleTimeString("fr-FR");
 }
 
-// ── WebSocket — réception des données en temps réel ──────────
+function setConnectionState(connected) {
+  const statusText = document.getElementById("statusText");
+  const footerStatus = document.getElementById("footerStatus");
+  const statusDot = document.getElementById("statusDot");
+  const footerDot = document.getElementById("footerDot");
+  const footerRight = document.querySelector(".footer-right");
 
-function connecterWebSocket() {
-  const ws    = new WebSocket(`ws://${location.host}`);
-  const dot   = document.getElementById('ws-dot');
-  const label = document.getElementById('ws-label');
+  statusText.textContent = connected ? "Connecté" : "Déconnecté";
+  footerStatus.textContent = connected ? "CONNECTÉ" : "DÉCONNECTÉ";
+
+  statusDot.classList.toggle("disconnected", !connected);
+  footerDot.classList.toggle("disconnected", !connected);
+  footerRight.style.color = connected ? "#22c55e" : "#ef4444";
+}
+
+function buildMirrorText(temperature, humidite) {
+  const ligne1 = `Temp:${Number(temperature).toFixed(1)}C`.padEnd(12, " ").slice(0, 12);
+  const ligne2 = `Humi:${Number(humidite).toFixed(1)}%`.padEnd(12, " ").slice(0, 12);
+  return normalizeText(ligne1 + ligne2).padEnd(TOTAL, " ").slice(0, TOTAL);
+}
+
+function updateMirror(data) {
+  displayText = buildMirrorText(data.temperature, data.humidite);
+  renderDisplay();
+  updateClock(data.horodatage || null);
+}
+
+function connectWebSocket() {
+  if (reconnectTimer) {
+    clearTimeout(reconnectTimer);
+    reconnectTimer = null;
+  }
+
+  const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+  const wsUrl = `${protocol}//${window.location.host}`;
+  ws = new WebSocket(wsUrl);
 
   ws.onopen = () => {
-    dot.classList.remove('offline');
-    label.textContent = 'Connecté';
+    setConnectionState(true);
   };
 
   ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    if (data.type !== 'mesure') return;
-
-    // Mise à jour des cartes
-    mettreAJourCarte('card-temp', data.temperature, SEUIL_TEMP, 'badge-temp', 'bar-temp');
-    mettreAJourCarte('card-humi', data.humidite,    SEUIL_HUMI, 'badge-humi', 'bar-humi');
-
-    // Ajout du nouveau point au graphique
-    const ts = new Date(data.horodatage);
-    chart.data.datasets[0].data.push({ x: ts, y: data.temperature });
-    chart.data.datasets[1].data.push({ x: ts, y: data.humidite    });
-
-    // Suppression des points de plus de 24h
-    const limite = Date.now() - 24 * 3600 * 1000;
-    chart.data.datasets.forEach(ds => {
-      ds.data = ds.data.filter(p => p.x.getTime() > limite);
-    });
-
-    chart.update('none'); // sans animation pour fluidité
-
-    // Horodatage
-    document.getElementById('last-update').textContent =
-      'Dernière mise à jour : ' + ts.toLocaleTimeString('fr-FR');
-
-    // Statut afficheur MODBUS
-    document.getElementById('modbus-status').className = 'afficheur-status ok';
-    document.getElementById('modbus-label').textContent = 'Envoyé à ' + ts.toLocaleTimeString('fr-FR');
+    try {
+      const data = JSON.parse(event.data);
+      if (data.type === "mesure") {
+        updateMirror(data);
+      }
+    } catch (err) {
+      console.error("Message WS invalide :", err);
+    }
   };
 
   ws.onclose = () => {
-    dot.classList.add('offline');
-    label.textContent = 'Déconnecté';
-    setTimeout(connecterWebSocket, 3000); // reconnexion automatique après 3s
+    setConnectionState(false);
+    reconnectTimer = setTimeout(connectWebSocket, 3000);
   };
 
   ws.onerror = () => {
-    dot.classList.add('offline');
-    label.textContent = 'Erreur';
+    setConnectionState(false);
+    if (ws) ws.close();
   };
 }
 
-connecterWebSocket();
+renderDisplay();
+updateClock();
+setConnectionState(false);
+connectWebSocket();
