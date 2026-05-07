@@ -6,7 +6,7 @@ if (!headers_sent()) {
     header('X-Frame-Options: SAMEORIGIN');
     header('X-Content-Type-Options: nosniff');
     header('Referrer-Policy: strict-origin-when-cross-origin');
-    header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
+    header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
 
     header(
         "Content-Security-Policy: "
@@ -102,7 +102,6 @@ $humidDashboard = "http://{$baseHost}:3400/public-dashboards/59d362ae97984967b75
             <main class="main">
                 <h1 class="dashboard-title">Analytics</h1>
 
-                <!-- KPI Cards -->
                 <div class="analytics-kpi-grid">
                     <div class="analytics-kpi-card">
                         <span class="analytics-kpi-label">Dashboard 1</span>
@@ -120,7 +119,6 @@ $humidDashboard = "http://{$baseHost}:3400/public-dashboards/59d362ae97984967b75
                     </div>
                 </div>
 
-                <!-- Monitoring Grafana -->
                 <section class="grafana-section">
                     <div class="grafana-header">
                         <div>
@@ -152,25 +150,13 @@ $humidDashboard = "http://{$baseHost}:3400/public-dashboards/59d362ae97984967b75
                             </a>
                         </div>
                     </div>
-
-                    <!-- Barre actions valeurs -->
-                    <div class="analytics-values-bar">
-                        <h4>Valeur température / humidité. </h4>
-                        <div class="analytics-actions analytics-actions--manage">
-                            <button class="action-btn add-btn" type="button">Ajouter</button>
-                            <button class="action-btn delete-btn" type="button">Supprimer</button>
-                            <button class="action-btn reset-btn" type="button">Réinitialiser</button>
-                        </div>
-                    </div>
                 </section>
 
-                <!-- Liens externes -->
                 <div class="external-links-bar">
                     <span class="external-links-bar__label">Liens externes</span>
                     <div class="analytics-actions analytics-actions--external">
-                        <a class="action-btn grafana-btn"  href="<?= e($grafanaBase) ?>"  <?= external_link_attrs($grafanaBase) ?>>Grafana</a>
-                        <a class="action-btn display-btn"  href="<?= e($displayBase) ?>"  <?= external_link_attrs($displayBase) ?>>Afficheur</a>
-                        <a class="action-btn database-btn" href="<?= e($databaseBase) ?>" <?= external_link_attrs($databaseBase) ?>>Base de donnée</a>
+                        <a class="action-btn grafana-btn" href="<?= e($grafanaBase) ?>" <?= external_link_attrs($grafanaBase) ?>>Grafana</a>
+                        <a class="action-btn display-btn" href="<?= e($displayBase) ?>" <?= external_link_attrs($displayBase) ?>>Afficheur</a>
                     </div>
                 </div>
             </main>

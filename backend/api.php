@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
-// 1. Paramètres de connexion (Utilise le nom du service Docker 'mysql')
+// 1. Paramètres de connexion
 $host = 'mysql'; 
 $db   = 'smart_hotel_bdd'; 
 $user = 'root';
@@ -23,13 +23,48 @@ try {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
     ]);
 
-    // On récupère l'action ou la table demandée
-    $action = $_GET['action'] ?? '';
-    $requestedTable = $_GET['table'] ?? '';
+    // ==========================================
+    // CAS 1 : ENREGISTRER UNE COMMANDE (POST)
+    // ==========================================
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
+        $raw_input = file_get_contents("php://input");
+        $data = json_decode($raw_input, true);
+
+        if ($data) {
+            $sql = "INSERT INTO commande (
+                        ID_CLIENT, 
+                        ID_EMPLOYE, 
+                        id_tables_transat, 
+                        DATE_COMMANDE, 
+                        STATUT_COMMANDE, 
+                        DETAIL_COMMANDE, 
+                        MONTANT_TOTAL
+                    ) VALUES (?, ?, ?, NOW(), ?, ?, ?)";
+            
+            $stmt = $pdo->prepare($sql);
+            $res = $stmt->execute([
+                $data['ID_CLIENT'] ?? 1,
+                $data['ID_EMPLOYE'] ?? 1,
+                $data['id_tables_transat'] ?? 0,
+                'en attente',
+                $data['DETAIL_COMMANDE'],
+                $data['MONTANT_TOTAL']
+            ]);
+
+            if ($res) {
+                echo json_encode(["status" => "success", "message" => "Commande enregistrée"]);
+            } else {
+                http_response_code(500);
+                echo json_encode(["status" => "error", "message" => "Erreur lors de l'insertion"]);
+            }
+            exit;
+        }
+    }
 
     // ==========================================
-    // CAS 1 : CONNEXION (LOGIN)
+    // CAS 2 : CONNEXION (LOGIN) - via ?action=login
     // ==========================================
+    $action = $_GET['action'] ?? '';
     if ($action === 'login') {
         $raw_input = file_get_contents("php://input");
         $data = json_decode($raw_input, true);
@@ -43,7 +78,6 @@ try {
         $input = trim($data['nom']);
         $chambre = trim($data['chambre']);
 
-        // Requête sur tes colonnes exactes : NOM_CLIENT, PRENOM_CLIENT, ID_CHAMBRE
         $sql = "SELECT * FROM client 
                 WHERE (
                     LOWER(NOM_CLIENT) = LOWER(:val) 
@@ -67,13 +101,9 @@ try {
     } 
 
     // ==========================================
-    // CAS 2 : RÉCUPÉRATION DES TABLES (14 tables autorisées)
+    // CAS 3 : RÉCUPÉRATION DES TABLES (GET)
     // ==========================================
-    
-    // Si on demande une table spécifique (ex: ?table=produit) ou par défaut 'produit'
-    $tableName = !empty($requestedTable) ? $requestedTable : 'produit';
-
-    // Liste exhaustive de tes 14 tables
+    $requestedTable = $_GET['table'] ?? 'produit';
     $allowedTables = [
         'capteur', 'chambre', 'client', 'commande', 'employe', 
         'espace', 'gerer', 'gerer_stock', 'ligne_commande', 
@@ -81,14 +111,13 @@ try {
         'type_employe', 'type_espace'
     ];
 
-    if (!in_array(strtolower($tableName), $allowedTables)) {
+    if (!in_array(strtolower($requestedTable), $allowedTables)) {
         http_response_code(403);
         echo json_encode(["status" => "error", "message" => "Table inexistante ou accès refusé"]);
         exit;
     }
 
-    // Exécution de la requête pour la table demandée
-    $stmt = $pdo->query("SELECT * FROM " . strtolower($tableName));
+    $stmt = $pdo->query("SELECT * FROM " . strtolower($requestedTable));
     $results = $stmt->fetchAll();
     
     echo json_encode($results);
