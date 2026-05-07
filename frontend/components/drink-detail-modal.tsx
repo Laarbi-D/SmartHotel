@@ -15,25 +15,28 @@ interface DrinkDetailModalProps {
 
 export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalProps) {
   const [quantity, setQuantity] = useState(1);
-  const [notes, setNotes] = useState("");
   const { addItem } = useCart();
-  const { t } = useLanguage(); 
+  const { t, lang } = useLanguage(); // On récupère lang ici
 
-  // Conversion du prix en nombre pour éviter les erreurs de calcul (au cas où la BDD renvoie un string)
-  const price = drink ? parseFloat(drink.PRIX_PRODUITS) : 0;
+  // --- LOGIQUE DE TRADUCTION ---
+  const suffix = lang === "fr" ? "" : `_${lang.toUpperCase()}`;
+  const displayName = drink ? (drink[`LIBELLE_PRODUIT${suffix}`] || drink.LIBELLE_PRODUIT) : "";
+  const displayBio = drink ? (drink[`BIO${suffix}`] || drink.BIO) : "";
+  // -----------------------------
+
+  const price = drink ? parseFloat(drink.PRIX_PRODUIT) : 0;
 
   const handleAddToOrder = () => {
     if (drink) {
-      addItem(drink, quantity, notes);
+      // On envoie le nom traduit à addItem pour que le panier soit cohérent
+      addItem({ ...drink, LIBELLE_PRODUIT: displayName }, quantity, ""); 
       setQuantity(1);
-      setNotes("");
       onClose();
     }
   };
 
   const handleClose = () => {
     setQuantity(1);
-    setNotes("");
     onClose();
   };
 
@@ -67,8 +70,8 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
 
               <div className="relative aspect-[4/3]">
                 <Image
-                  src={drink.LIEN_IMAGE_PRODUIT || "/placeholder.svg"}
-                  alt={drink.LIBELLE_PRODUITS || "SmartHotel Drink"}
+                  src={drink.IMAGE_PRODUIT || "/placeholder.svg"}
+                  alt={displayName}
                   fill
                   className="object-cover"
                   priority
@@ -79,7 +82,7 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
               <div className="p-6 -mt-8 relative bg-white">
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <h2 className="font-serif text-3xl text-navy-deep">
-                    {drink.LIBELLE_PRODUITS}
+                    {displayName} {/* TITRE TRADUIT */}
                   </h2>
                   <span className="text-teal font-semibold text-2xl">
                     €{price.toFixed(2)}
@@ -87,10 +90,10 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
                 </div>
 
                 <p className="text-navy/60 leading-relaxed mb-6">
-                  {drink.DESCRIPTION_PRODUIT}
+                  {displayBio} {/* BIO TRADUITE */}
                 </p>
 
-                <div className="mb-6">
+                <div className="mb-8">
                   <label className="block text-sm text-navy/60 mb-3 font-medium uppercase tracking-wider">
                     {t.common.quantity}
                   </label>
@@ -115,19 +118,6 @@ export function DrinkDetailModal({ drink, isOpen, onClose }: DrinkDetailModalPro
                       <Plus className="w-5 h-5 text-navy-deep" />
                     </motion.button>
                   </div>
-                </div>
-
-                <div className="mb-8">
-                  <label className="block text-sm text-navy/60 mb-3 font-medium uppercase tracking-wider">
-                    {t.cart.specialRequests}
-                  </label>
-                  <textarea
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    placeholder={t.cart.specialPlaceholder}
-                    className="w-full px-4 py-3 bg-muted rounded-xl text-navy-deep border border-border focus:border-teal outline-none transition-all resize-none"
-                    rows={2}
-                  />
                 </div>
 
                 <motion.button

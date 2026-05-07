@@ -1,3 +1,38 @@
+:root {
+  --bg: #f5f7fb;
+  --surface: rgba(255, 255, 255, 0.78);
+  --surface-solid: #ffffff;
+  --surface-soft: #eef3fb;
+  --border: rgba(15, 23, 42, 0.08);
+  --border-strong: rgba(15, 23, 42, 0.12);
+  --text: #0f172a;
+  --muted: #64748b;
+  --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --shadow-hover: 0 18px 40px rgba(15, 23, 42, 0.12);
+  --radius-xl: 24px;
+  --radius-lg: 18px;
+  --radius-md: 14px;
+  --radius-sm: 12px;
+  --blue: #2563eb;
+  --blue-dark: #1d4ed8;
+  --red: #dc2626;
+  --red-dark: #b91c1c;
+  --orange: #f97316;
+  --orange-dark: #ea580c;
+  --green: #16a34a;
+  --green-dark: #15803d;
+  --purple: #7c3aed;
+  --purple-dark: #6d28d9;
+}
+
+html, body {
+  background:
+    radial-gradient(circle at top left, rgba(6, 182, 212, 0.10), transparent 30%),
+    radial-gradient(circle at top right, rgba(249, 115, 22, 0.08), transparent 26%),
+    var(--bg);
+  color: var(--text);
+}
+
 .analytics-kpi-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -6,31 +41,47 @@
 }
 
 .analytics-kpi-card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 1.2rem 1.4rem;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 1.25rem 1.35rem;
+  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.analytics-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--border-strong);
 }
 
 .analytics-kpi-label {
   font-size: 0.82rem;
-  color: #9ca3af;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .analytics-kpi-value {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #111827;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text);
 }
 
 .grafana-section {
-  background: #ffffff;
-  border-radius: 18px;
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
   padding: 1.5rem;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  box-shadow: var(--shadow);
   margin-bottom: 1.5rem;
 }
 
@@ -46,14 +97,14 @@
 .grafana-header h2 {
   margin: 0;
   font-size: 1.35rem;
-  font-weight: 700;
-  color: #111827;
+  font-weight: 800;
+  color: var(--text);
 }
 
 .grafana-header p {
-  margin: 0.35rem 0 0 0;
-  font-size: 0.92rem;
-  color: #9ca3af;
+  margin: 0.4rem 0 0 0;
+  font-size: 0.95rem;
+  color: var(--muted);
 }
 
 .analytics-actions {
@@ -63,63 +114,68 @@
 }
 
 .action-btn {
-  border: none;
-  border-radius: 12px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
   padding: 0.82rem 1.15rem;
   font-size: 0.92rem;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease, color 180ms ease;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 44px;
   line-height: 1;
+  white-space: nowrap;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.action-btn:focus-visible {
+  outline: 2px solid rgba(37, 99, 235, 0.45);
+  outline-offset: 3px;
 }
 
 .action-btn:visited {
   color: inherit;
 }
 
-/* Groupe du haut : gestion */
 .analytics-actions--manage .action-btn {
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.10);
-  border: 1px solid transparent;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
 }
 
 .add-btn {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, var(--blue), #3b82f6);
   color: #ffffff;
 }
 
 .add-btn:hover {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, var(--blue-dark), var(--blue));
 }
 
 .delete-btn {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  background: linear-gradient(135deg, var(--red), #ef4444);
   color: #ffffff;
 }
 
 .delete-btn:hover {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, var(--red-dark), var(--red));
 }
 
 .reset-btn {
-  background: #f8fafc;
-  color: #111827;
-  border: 1px solid #e5e7eb;
+  background: var(--surface-solid);
+  color: var(--text);
+  border-color: var(--border);
 }
 
 .reset-btn:hover {
-  background: #eef2f7;
-  transform: translateY(-1px);
+  background: var(--surface-soft);
+  border-color: var(--border-strong);
 }
 
-/* Cartes Grafana */
 .grafana-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -127,71 +183,44 @@
 }
 
 .grafana-card {
-  background: #f8fafc;
-  border-radius: 14px;
-  padding: 1rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,250,252,0.86));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.1rem;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
 }
 
 .grafana-card h3 {
-  margin: 0 0 0.9rem 0;
+  margin: 0;
   font-size: 1rem;
-  font-weight: 700;
-  color: #111827;
+  font-weight: 800;
+  color: var(--text);
 }
 
-.grafana-card iframe {
+.grafana-card p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.grafana-card .action-btn {
   width: 100%;
-  height: 420px;
-  border: none;
-  border-radius: 12px;
-  background: #e5e7eb;
-}
-
-/* Barre du bas */
-.external-links-bar {
-  position: sticky;
-  bottom: 16px;
-  z-index: 50;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
-  border: 1px solid #e5e7eb;
-  border-radius: 18px;
-  padding: 1rem 1.2rem;
-  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.10);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.external-links-bar__label {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #6b7280;
-  white-space: nowrap;
-}
-
-/* Groupe du bas : liens externes */
-.analytics-actions--external {
-  justify-content: flex-end;
-}
-
-.analytics-actions--external .action-btn {
-  min-width: 150px;
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.10);
 }
 
 .grafana-btn {
-  background: #f97316;
+  background: linear-gradient(135deg, #f97316 0%, #070102 55%, #c5810a 100%);
   color: #ffffff !important;
+  box-shadow: 0 12px 24px rgba(249, 115, 22, 0.22);
 }
 
 .grafana-btn:hover {
-  background: #ea580c;
+  background: linear-gradient(135deg, #ea580c 0%, #f43f5e 55%, #d97706 100%);
   color: #ffffff !important;
   transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(249, 115, 22, 0.30);
+  box-shadow: 0 14px 28px rgba(249, 115, 22, 0.30);
 }
 
 .grafana-btn:visited,
@@ -202,15 +231,16 @@
 }
 
 .display-btn {
-  background: #16a34a;
+  background: linear-gradient(135deg, #0b5e6d 0%, #2165d3 52%, #1bc7b3 100%);
   color: #ffffff !important;
+  box-shadow: 0 12px 24px rgba(6, 182, 212, 0.22);
 }
 
 .display-btn:hover {
-  background: #15803d;
+  background: linear-gradient(135deg, #0891b2 0%, #2563eb 52%, #0f766e 100%);
   color: #ffffff !important;
   transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(22, 163, 74, 0.30);
+  box-shadow: 0 14px 28px rgba(6, 182, 212, 0.30);
 }
 
 .display-btn:visited,
@@ -221,15 +251,14 @@
 }
 
 .database-btn {
-  background: #7c3aed;
+  background: linear-gradient(135deg, var(--purple), #8b5cf6);
   color: #ffffff !important;
 }
 
 .database-btn:hover {
-  background: #6d28d9;
+  background: linear-gradient(135deg, var(--purple-dark), var(--purple));
   color: #ffffff !important;
-  transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(124, 58, 237, 0.30);
+  box-shadow: 0 12px 24px rgba(124, 58, 237, 0.22);
 }
 
 .database-btn:visited,
@@ -239,57 +268,128 @@
   text-decoration: none;
 }
 
-/* Dark mode */
+/* ── Barre "Valeur température / humidité" ── */
+.analytics-values-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.analytics-values-label {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── Barre liens externes ── */
+.external-links-bar {
+  background: rgba(255, 255, 255, 0.80);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 1rem 1.2rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0;
+}
+
+.external-links-bar__label {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.analytics-actions--external {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.analytics-actions--external .action-btn {
+  min-width: 140px;
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+}
+
+/* ── Dark mode ── */
+html.dark body {
+  background:
+    radial-gradient(circle at top left, rgba(6, 182, 212, 0.10), transparent 30%),
+    radial-gradient(circle at top right, rgba(249, 115, 22, 0.08), transparent 26%),
+    #0b1220;
+  color: #e5e7eb;
+}
+
 html.dark .analytics-kpi-card,
-html.dark .grafana-section {
-  background: #111827;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+html.dark .grafana-section,
+html.dark .grafana-card,
+html.dark .external-links-bar {
+  background: rgba(15, 23, 42, 0.78);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+}
+
+html.dark .analytics-kpi-label,
+html.dark .grafana-header p,
+html.dark .grafana-card p,
+html.dark .external-links-bar__label,
+html.dark .analytics-values-label {
+  color: #94a3b8;
 }
 
 html.dark .analytics-kpi-value,
 html.dark .grafana-header h2,
 html.dark .grafana-card h3 {
-  color: #f9fafb;
-}
-
-html.dark .analytics-kpi-label,
-html.dark .grafana-header p,
-html.dark .external-links-bar__label {
-  color: #9ca3af;
-}
-
-html.dark .grafana-card {
-  background: #1f2937;
+  color: #f8fafc;
 }
 
 html.dark .reset-btn {
-  background: #374151;
-  color: #f9fafb;
-  border-color: #4b5563;
+  background: rgba(30, 41, 59, 0.92);
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.10);
 }
 
 html.dark .reset-btn:hover {
-  background: #4b5563;
+  background: rgba(51, 65, 85, 0.96);
 }
 
-html.dark .external-links-bar {
-  background: rgba(17, 24, 39, 0.92);
-  border-color: #374151;
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35);
+html.dark .analytics-values-bar {
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
-/* Responsive */
+/* ── Responsive ── */
 @media (max-width: 1000px) {
-  .analytics-kpi-grid {
-    grid-template-columns: 1fr;
-  }
-
+  .analytics-kpi-grid,
   .grafana-grid {
     grid-template-columns: 1fr;
   }
 
-  .grafana-card iframe {
-    height: 360px;
+  .grafana-card {
+    padding: 1rem;
+  }
+
+  .analytics-values-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .analytics-values-bar .analytics-actions {
+    width: 100%;
+  }
+
+  .analytics-values-bar .action-btn {
+    flex: 1 1 100%;
   }
 
   .external-links-bar {

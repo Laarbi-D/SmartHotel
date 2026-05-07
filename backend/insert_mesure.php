@@ -34,7 +34,7 @@ $telegramToken = getenv('TELEGRAM_BOT_TOKEN') ?: '';
 $telegramChatId = getenv('TELEGRAM_CHAT_ID') ?: '';
 
 $temp = isset($_POST['temp']) ? filter_var($_POST['temp'], FILTER_VALIDATE_FLOAT) : null;
-$hum  = isset($_POST['hum'])  ? filter_var($_POST['hum'], FILTER_VALIDATE_FLOAT)  : null;
+$hum  = isset($_POST['hum']) ? filter_var($_POST['hum'], FILTER_VALIDATE_FLOAT) : null;
 
 if ($temp === false || $temp === null || $hum === false || $hum === null) {
     respond([
@@ -79,11 +79,40 @@ try {
     $telegram = 'non déclenché';
     $telegramDetail = null;
 
-    if (($alertTemp || $alertHum) && $telegramToken !== '' && $telegramChatId !== '') {
-        $message = "🚨 Alerte SmartHotel\n";
-        $message .= "Température : " . round((float)$temp, 1) . " °C\n";
-        $message .= "Humidité : " . round((float)$hum, 1) . " %\n";
-        $message .= "Heure : " . date('Y-m-d H:i:s');
+    $alertCooldown = 300; // 5 minutes
+    $alertFile = __DIR__ . '/telegram_last_alert.txt';
+
+    $now = time();
+    $lastAlertTime = 0;
+
+    if (file_exists($alertFile)) {
+        $lastAlertTime = (int) file_get_contents($alertFile);
+    }
+
+    $canSendTelegram = ($now - $lastAlertTime) >= $alertCooldown;
+
+    if (($alertTemp || $alertHum) && !$canSendTelegram) {
+        $telegram = 'cooldown actif';
+    }
+
+    if (($alertTemp || $alertHum) && $telegramToken !== '' && $telegramChatId !== '' && $canSendTelegram) {
+        $message = "🚨 IoT SmartHotel:\n";
+
+        if ($alertTemp) {
+            $message .= "🔥 T°=" . round((float)$temp, 1) . "°C >" . $MAX_TEMP . "°C ⚠️\n";
+        } else {
+            $message .= "🌡 T°=" . round((float)$temp, 1) . "°C\n";
+        }
+
+        if ($hum < $MIN_HUM) {
+            $message .= "💧 HR=" . round((float)$hum, 1) . "% <" . $MIN_HUM . "% ⚠️\n";
+        } elseif ($hum > $MAX_HUM) {
+            $message .= "💧 HR=" . round((float)$hum, 1) . "% >" . $MAX_HUM . "% ⚠️\n";
+        } else {
+            $message .= "💧 HR=" . round((float)$hum, 1) . "%\n";
+        }
+
+        $message .= "🕒 " . date('H:i:s');
 
         $payload = http_build_query([
             'chat_id' => $telegramChatId,
@@ -112,6 +141,7 @@ try {
         } elseif ($httpCode >= 200 && $httpCode < 300) {
             $telegram = 'ok';
             $telegramDetail = $response;
+            file_put_contents($alertFile, (string) $now, LOCK_EX);
         } else {
             $telegram = 'erreur';
             $telegramDetail = $response;

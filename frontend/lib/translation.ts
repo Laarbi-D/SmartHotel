@@ -25,8 +25,6 @@ export const translations = {
       title: "Votre Commande", 
       empty: "Votre panier est vide", 
       confirm: "Confirmer la commande",
-      specialRequests: "Demandes spéciales",
-      specialPlaceholder: "Moins de glaçons, citron en plus...",
       addOrder: "Ajouter à la commande"
     },
     confirmation: {
@@ -81,8 +79,6 @@ export const translations = {
       title: "Your Order", 
       empty: "Your basket is empty", 
       confirm: "Confirm Order",
-      specialRequests: "Special requests",
-      specialPlaceholder: "Less ice, extra lemon...",
       addOrder: "Add to order"
     },
     confirmation: {
@@ -137,8 +133,6 @@ export const translations = {
       title: "Tu Pedido", 
       empty: "Tu cesta está vacía", 
       confirm: "Confirmar Pedido",
-      specialRequests: "Peticiones especiales",
-      specialPlaceholder: "Menos hielo, más limón...",
       addOrder: "Añadir al pedido"
     },
     confirmation: {

@@ -17,7 +17,7 @@ const CONFIG = {
     host     : 'localhost',
     user     : 'root',
     password : 'rootpassword',
-    database : 'smarthotelbdd'
+    database : 'smart_hotel_bdd'
   },
   AFFICHEUR: {
     ip  : '192.168.112.210',
@@ -43,7 +43,7 @@ app.get('/api/history', async (req, res) => {
     const db = await mysql.createConnection(CONFIG.DB);
     const [rows] = await db.execute(`
       SELECT TYPE_CAPTEUR, MESURE, DATE_MESURE
-      FROM MESURE_CAPTEUR
+      FROM capteur
       WHERE DATE_MESURE >= NOW() - INTERVAL 24 HOUR
       ORDER BY DATE_MESURE ASC
     `);
@@ -135,13 +135,13 @@ async function rafraichir() {
     const db = await mysql.createConnection(CONFIG.DB);
 
     const [rowsT] = await db.execute(`
-      SELECT MESURE, DATE_MESURE FROM MESURE_CAPTEUR
+      SELECT MESURE, DATE_MESURE FROM capteur
       WHERE TYPE_CAPTEUR = 'T'
       ORDER BY DATE_MESURE DESC LIMIT 1
     `);
 
     const [rowsH] = await db.execute(`
-      SELECT MESURE, DATE_MESURE FROM MESURE_CAPTEUR
+      SELECT MESURE, DATE_MESURE FROM capteur
       WHERE TYPE_CAPTEUR = 'H'
       ORDER BY DATE_MESURE DESC LIMIT 1
     `);

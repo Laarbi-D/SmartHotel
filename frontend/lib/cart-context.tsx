@@ -2,7 +2,6 @@
 
 import { createContext, useContext, useState, type ReactNode } from "react";
 
-// On utilise "any" car les données viennent de MySQL avec des noms dynamiques (ID_PRODUIT, etc.)
 export interface CartItem {
   drink: any;
   quantity: number;
@@ -27,7 +26,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // --- AJOUTER UN PRODUIT ---
   const addItem = (drink: any, quantity: number, notes: string) => {
     setItems((prev) => {
-      // On vérifie si le produit existe via ID_PRODUIT (colonne MySQL)
       const existing = prev.find((item) => item.drink.ID_PRODUIT === drink.ID_PRODUIT);
       if (existing) {
         return prev.map((item) =>
@@ -61,12 +59,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // --- VIDER LE PANIER ---
   const clearCart = () => setItems([]);
 
-  // --- CALCULS DU PANIER (Adapté à MySQL) ---
+  // --- CALCULS DU PANIER (CORRIGÉS) ---
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   
   const totalPrice = items.reduce((sum, item) => {
-    // On force le prix MySQL en nombre pour éviter les erreurs "NaN"
-    const price = parseFloat(item.drink.PRIX_PRODUITS) || 0;
+    // CORRECTION : PRIX_PRODUIT au lieu de PRIX_PRODUITS
+    const price = parseFloat(item.drink.PRIX_PRODUIT) || 0;
     return sum + (price * item.quantity);
   }, 0);
 

@@ -12,9 +12,16 @@ interface DrinkCardProps {
 }
 
 export function DrinkCard({ drink, onSelect, index }: DrinkCardProps) {
-  const { t } = useLanguage(); 
+  const { t, lang } = useLanguage(); // On récupère 'lang' (fr, en ou es)
 
-  // CORRECTION 1 : PRIX_PRODUITS devient PRIX_PRODUIT
+  // LOGIQUE DE TRADUCTION DYNAMIQUE :
+  // Si lang est "en", on cherche "LIBELLE_PRODUIT_EN"
+  // Si lang est "fr", on reste sur "LIBELLE_PRODUIT" (français par défaut)
+  const suffix = lang === "fr" ? "" : `_${lang.toUpperCase()}`;
+  
+  const displayName = drink[`LIBELLE_PRODUIT${suffix}`] || drink.LIBELLE_PRODUIT;
+  const displayBio = drink[`BIO${suffix}`] || drink.BIO;
+
   const displayPrice = drink.PRIX_PRODUIT 
     ? parseFloat(drink.PRIX_PRODUIT).toFixed(2) 
     : "0.00";
@@ -29,10 +36,9 @@ export function DrinkCard({ drink, onSelect, index }: DrinkCardProps) {
     >
       {/* SECTION IMAGE */}
       <div className="relative aspect-[4/3] overflow-hidden">
-        {/* CORRECTION 2 : LIEN_IMAGE_PRODUIT devient IMAGE_PRODUIT */}
         <Image
           src={drink.IMAGE_PRODUIT || "/placeholder.svg"} 
-          alt={drink.LIBELLE_PRODUIT || "SmartHotel Drink"}
+          alt={displayName || "SmartHotel Drink"}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
@@ -40,21 +46,19 @@ export function DrinkCard({ drink, onSelect, index }: DrinkCardProps) {
       </div>
 
       <div className="p-5">
-        {/* EN-TÊTE : Libellé et Prix */}
+        {/* EN-TÊTE : Libellé traduit et Prix */}
         <div className="flex items-start justify-between gap-3 mb-2">
-          {/* CORRECTION 3 : LIBELLE_PRODUITS devient LIBELLE_PRODUIT */}
           <h3 className="font-serif text-xl text-navy-deep line-clamp-1">
-            {drink.LIBELLE_PRODUIT}
+            {displayName}
           </h3>
           <span className="text-teal font-semibold text-lg whitespace-nowrap">
             €{displayPrice}
           </span>
         </div>
         
-        {/* DESCRIPTION */}
-        {/* CORRECTION 4 : DESCRIPTION_PRODUIT devient BIO */}
+        {/* DESCRIPTION TRADUITE */}
         <p className="text-navy/60 text-sm leading-relaxed mb-4 line-clamp-2 min-h-[2.5rem]">
-          {drink.BIO}
+          {displayBio}
         </p>
 
         {/* BOUTON D'ACTION */}
@@ -65,8 +69,7 @@ export function DrinkCard({ drink, onSelect, index }: DrinkCardProps) {
           className="w-full py-3 bg-muted hover:bg-teal text-navy hover:text-white font-medium rounded-xl flex items-center justify-center gap-2 transition-all duration-300"
         >
           <Plus className="w-4 h-4" />
-          {/* Fallback si la clé de traduction est manquante */}
-          {(t as any).cart?.addOrder || "Commander"}
+          {t.cart.addOrder}
         </motion.button>
       </div>
     </motion.div>
