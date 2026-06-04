@@ -1,28 +1,32 @@
 services:
   # --- GATEWAY (Nginx HTTPS) ---
-  # C'est lui qui gère le SSL et redirige vers le bon service
   gateway:
     image: nginx:alpine
     container_name: hotel_gateway
     ports:
-      - "80:80"   # Redirigera vers le 443
-      - "443:443" # Le vrai port HTTPS
+      - "80:80"   
+      - "443:443" 
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./certs:/etc/nginx/certs:ro
     depends_on:
       - frontend
       - php
+      - grafana
 
-  # --- BACKEND (PHP) ---
+  # --- BACKEND (Node.js API - anciennement PHP) ---
   php:
     build: ./backend
     container_name: php_server
-    volumes:
-      - ./backend:/var/www/html
+    # Suppression du volume /var/www/html pour laisser Node.js et son node_modules tourner proprement
     environment:
       TELEGRAM_BOT_TOKEN: "8525409568:AAG3saVaLLltmxPLyPKxKeeTUDefK6eldss"
       TELEGRAM_CHAT_ID: "1601238568"
+      DB_HOST: "mysql"
+      DB_NAME: "smart_hotel_bdd"
+      DB_USER: "root"
+      DB_PASS: "rootpassword"
+      PORT: 80 # On indique explicitement à ton api.js d'écouter sur le port 80
     depends_on:
       - mysql
 
@@ -32,7 +36,7 @@ services:
     container_name: mysql_server
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: smart_hotel_bdd  # <-- CORRECTION ICI : Le bon nom avec les tirets
+      MYSQL_DATABASE: smart_hotel_bdd  
     volumes:
       - ./mysql-data:/var/lib/mysql
       - ./mysql-init:/docker-entrypoint-initdb.d
@@ -43,13 +47,11 @@ services:
   frontend:
     build: ./frontend
     container_name: nextjs_app
-    # On ne l'expose plus sur le port 80 directement, la gateway s'en occupe
     expose:
       - "3000"
     depends_on:
       - php
 
-  # --- PHPMYADMIN & GRAFANA (Gardés pour ton dev) ---
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: pma
@@ -63,20 +65,22 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: grafana_server
-    ports:
-      - "3400:3000" 
+    expose:
+      - "3000"
     volumes:
       - grafana-storage:/var/lib/grafana
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_SECURITY_ALLOW_EMBEDDING=true
-      - GF_SECURITY_COOKIE_SAMESITE=disabled
-      - GF_SECURITY_COOKIE_SECURE=false
-      - GF_SERVER_ROOT_URL=http://192.168.112.158:3400
-      - GF_SERVER_DOMAIN=192.168.112.158
-      - GF_SERVER_ENFORCE_DOMAIN=false
-      - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+       - GF_SECURITY_ADMIN_PASSWORD=admin
+       - GF_SECURITY_ALLOW_EMBEDDING=true
+       - GF_SECURITY_COOKIE_SAMESITE=lax
+       - GF_SECURITY_COOKIE_SECURE=false
+       - GF_SERVER_PROTOCOL=http
+       - GF_SERVER_DOMAIN=192.168.112.158
+       - GF_SERVER_ROOT_URL=https://192.168.112.158/grafana/
+       - GF_SERVER_SERVE_FROM_SUB_PATH=true
+       - GF_SERVER_ENFORCE_DOMAIN=false
+       - GF_AUTH_ANONYMOUS_ENABLED=true
+       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
     restart: unless-stopped
 
 volumes:

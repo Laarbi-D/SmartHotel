@@ -25,10 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     ], 405);
 }
 
-$host = 'mysql';
-$db   = 'smart_hotel_bdd';
-$user = 'root';
-$pass = 'rootpassword';
+$host = getenv('DB_HOST') ?: 'mysql';
+$db   = getenv('DB_NAME') ?: '';
+$user = getenv('DB_USER') ?: '';
+$pass = getenv('DB_PASS') ?: '';
 
 $telegramToken = getenv('TELEGRAM_BOT_TOKEN') ?: '';
 $telegramChatId = getenv('TELEGRAM_CHAT_ID') ?: '';

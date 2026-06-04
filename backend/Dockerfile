@@ -1,9 +1,19 @@
-FROM php:8.2-apache
+FROM node:20-alpine
 
-# On installe mysqli ET pdo_mysql pour être tranquille
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+# Définition du dossier de travail dans le conteneur
+WORKDIR /app
 
-# On active le module de réécriture Apache (souvent utile)
-RUN a2enmod rewrite
+# Copie d'abord les fichiers de configuration pour optimiser le cache Docker
+COPY package*.json ./
 
-COPY . /var/www/html/
+# Installation des dépendances (express, cors, mysql2)
+RUN npm install
+
+# Copie tout le reste du code (notamment ton fichier api.js)
+COPY . .
+
+# Ton API Express écoute sur le port 80
+EXPOSE 80
+
+# Commande magique pour lancer ton API JavaScript au démarrage du conteneur
+CMD ["node", "api.js"]
