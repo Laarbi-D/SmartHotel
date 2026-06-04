@@ -17,9 +17,9 @@ export function CartDrawer({ isOpen, onClose, onConfirmOrder }: CartDrawerProps)
   const { items, totalPrice, updateQuantity, removeItem, clearCart } = useCart();
   const { t } = useLanguage(); 
 
-  // Lecture automatique de l'URL (?table=X)
   const searchParams = useSearchParams();
   const tableParam = searchParams.get("table");
+  // Conversion propre en entier, par défaut 0 si non présent
   const tableId = tableParam ? parseInt(tableParam, 10) : 0;
 
   const handleConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,7 +28,7 @@ export function CartDrawer({ isOpen, onClose, onConfirmOrder }: CartDrawerProps)
 
     if (!items || items.length === 0) return;
 
-    // Préparation sécurisée de la chaîne descriptive
+    // DETAIL_COMMANDE contient uniquement la liste textuelle des articles
     const detailText = items
       .map((item) => `${item?.quantity ?? 1}x ${item?.drink?.LIBELLE_PRODUIT || "Boisson"}`)
       .join(", ");
@@ -36,13 +36,12 @@ export function CartDrawer({ isOpen, onClose, onConfirmOrder }: CartDrawerProps)
     const orderData = {
       ID_CLIENT: 1, 
       ID_EMPLOYE: 1, 
-      id_tables_transat: tableId, // Injection dynamique du numéro de transat scanné
+      id_tables_transat: tableId, // L'ID du transat est envoyé séparément, propre
       DETAIL_COMMANDE: detailText,
       MONTANT_TOTAL: totalPrice ?? 0,
     };
 
     try {
-      // NOUVELLE API : On cible /api/commandes au lieu de /backend/api.php
       const response = await fetch("/api/commandes", {
         method: "POST",
         headers: { 
@@ -52,17 +51,17 @@ export function CartDrawer({ isOpen, onClose, onConfirmOrder }: CartDrawerProps)
         body: JSON.stringify(orderData),
       });
 
-      const responseText = await response.text();
-      const data = responseText ? JSON.parse(responseText) : null;
+      const data = await response.json();
 
       if (response.ok && data?.status === "success") {
         clearCart(); 
         onConfirmOrder(); 
       } else {
-        alert("Erreur système : " + (data?.message || "Impossible d'enregistrer."));
+        alert("Erreur système : " + (data?.message || "Impossible d'enregistrer la commande."));
       }
     } catch (error) {
-      console.error("Échec de la communication avec l'API NGINX :", error);
+      console.error("Échec de la communication avec l'API :", error);
+      alert("Erreur de connexion au serveur.");
     }
   };
 
@@ -114,13 +113,11 @@ export function CartDrawer({ isOpen, onClose, onConfirmOrder }: CartDrawerProps)
                         <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                           <Image src={image} alt={name} fill className="object-cover" />
                         </div>
-
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between items-start">
                             <h3 className="font-serif text-lg text-navy-deep truncate">{name}</h3>
                             <p className="text-teal font-bold">€{lineTotal.toFixed(2)}</p>
                           </div>
-                          
                           <div className="flex items-center gap-3 mt-3">
                             <div className="flex items-center gap-2 bg-white rounded-lg border border-border px-1">
                               <button type="button" onClick={() => updateQuantity(id, item.quantity - 1)} className="p-1">

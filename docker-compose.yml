@@ -14,11 +14,10 @@ services:
       - php
       - grafana
 
-  # --- BACKEND (Node.js API - anciennement PHP) ---
+  # --- BACKEND (Node.js API) ---
   php:
     build: ./backend
     container_name: php_server
-    # Suppression du volume /var/www/html pour laisser Node.js et son node_modules tourner proprement
     environment:
       TELEGRAM_BOT_TOKEN: "8525409568:AAG3saVaLLltmxPLyPKxKeeTUDefK6eldss"
       TELEGRAM_CHAT_ID: "1601238568"
@@ -26,7 +25,8 @@ services:
       DB_NAME: "smart_hotel_bdd"
       DB_USER: "root"
       DB_PASS: "rootpassword"
-      PORT: 80 # On indique explicitement à ton api.js d'écouter sur le port 80
+      PORT: 80
+      TZ: "Europe/Paris" # Correction ici pour l'heure locale
     depends_on:
       - mysql
 
@@ -62,6 +62,7 @@ services:
     ports:
       - "8081:80"
 
+# --- GRAFANA (Dashboards) ---
   grafana:
     image: grafana/grafana:latest
     container_name: grafana_server
