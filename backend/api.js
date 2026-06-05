@@ -1,10 +1,11 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
 const cors = require('cors');
-const bcrypt = require('bcryptjs'); // <-- Importation de bcrypt pour les mots de passe
+const bcrypt = require('bcryptjs');
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // ⚠️ IMPORTANT pour lire temp= et hum= en POST
 app.use(cors());
 
 const db = mysql.createPool({
@@ -35,32 +36,21 @@ app.post("/api/login", async (req, res) => {
     }
 });
 
-// 2. ROUTE LOGIN PERSONNEL (Email + Mot de passe sécurisé)
+// 2. ROUTE LOGIN PERSONNEL
 app.post("/api/login-staff", async (req, res) => {
     try {
-        // On récupère le mail et le mot de passe depuis le frontend
         const { mail_employe, mdp_employe } = req.body;
         if (!mail_employe || !mdp_employe) return res.status(400).json({ status: "error", message: "Données manquantes" });
 
-        // 1. On cherche d'abord l'employé avec son adresse e-mail
         const sql = "SELECT * FROM employe WHERE LOWER(MAIL_EMPLOYE) = ?";
         const [rows] = await db.query(sql, [mail_employe.trim().toLowerCase()]);
 
         if (rows.length > 0) {
             const employe = rows[0];
-            
-            // 2. On compare le mot de passe fourni avec le hash stocké en BDD
             const match = await bcrypt.compare(mdp_employe, employe.MOT_DE_PASSE_EMPLOYE);
-            
-            if (match) {
-                // Le mot de passe correspond !
-                res.json({ status: "success", user: employe });
-            } else {
-                // Le mot de passe est faux
-                res.status(401).json({ status: "error", message: "Mot de passe incorrect" });
-            }
+            if (match) res.json({ status: "success", user: employe });
+            else res.status(401).json({ status: "error", message: "Mot de passe incorrect" });
         } else {
-            // L'adresse e-mail n'existe pas
             res.status(401).json({ status: "error", message: "Employé introuvable" });
         }
     } catch (err) {
@@ -78,11 +68,10 @@ app.get(["/api/produits", "/api/tables/produit", "/api/produit", "/backend/api.p
     }
 });
 
-// 4. ROUTE COMMANDES (Heure de Paris)
+// 4. ROUTE COMMANDES
 app.post("/api/commandes", async (req, res) => {
     try {
         const { ID_CLIENT, ID_EMPLOYE, id_tables_transat, DETAIL_COMMANDE, MONTANT_TOTAL } = req.body;
-        
         const dateFr = new Date().toLocaleString("sv-SE", { timeZone: "Europe/Paris" });
 
         const sql = `
@@ -90,17 +79,77 @@ app.post("/api/commandes", async (req, res) => {
             (ID_CLIENT, ID_EMPLOYE, id_tables_transat, DETAIL_COMMANDE, MONTANT_TOTAL, STATUT_COMMANDE, DATE_COMMANDE) 
             VALUES (?, ?, ?, ?, ?, 'en attente', ?)
         `;
-        
         const [result] = await db.query(sql, [
-            ID_CLIENT || 1, 
-            ID_EMPLOYE || 1, 
-            id_tables_transat || 0, 
-            DETAIL_COMMANDE, 
+            ID_CLIENT || 1,
+            ID_EMPLOYE || 1,
+            id_tables_transat || 0,
+            DETAIL_COMMANDE,
             MONTANT_TOTAL,
             dateFr
         ]);
 
         res.json({ status: "success", id: result.insertId });
+    } catch (err) {
+        res.status(500).json({ status: "error", message: err.message });
+    }
+});
+
+// 5. ROUTE CAPTEUR AHT20 ✅
+app.post(["/insert_mesure.php", "/backend/insert_mesure.php"], async (req, res) => {
+    try {
+        const temp = parseFloat(req.body.temp ?? req.query.temp);
+        const hum  = parseFloat(req.body.hum  ?? req.query.hum);
+
+        if (isNaN(temp) || isNaN(hum)) {
+            return res.status(400).json({ status: "error", message: "temp et hum requis" });
+        }
+
+        await db.query(
+            "INSERT INTO capteur (TYPE_CAPTEUR, MESURE, DATE_MESURE) VALUES (?, ?, NOW())",
+            ['T', temp]
+        );
+        await db.query(
+            "INSERT INTO capteur (TYPE_CAPTEUR, MESURE, DATE_MESURE) VALUES (?, ?, NOW())",
+            ['H', hum]
+        );
+
+        const MAX_TEMP = 21.0, MIN_HUM = 30.0, MAX_HUM = 70.0;
+        const alertTemp = temp > MAX_TEMP;
+        const alertHum  = hum < MIN_HUM || hum > MAX_HUM;
+
+        let telegram = 'non déclenché';
+
+        if (alertTemp || alertHum) {
+            const token  = process.env.TELEGRAM_BOT_TOKEN || '';
+            const chatId = process.env.TELEGRAM_CHAT_ID  || '';
+
+            if (token && chatId) {
+                let message = "🚨 IoT SmartHotel:\n";
+                message += alertTemp
+                    ? `🔥 T°=${temp.toFixed(1)}°C >${MAX_TEMP}°C ⚠️\n`
+                    : `🌡 T°=${temp.toFixed(1)}°C\n`;
+
+                if      (hum < MIN_HUM) message += `💧 HR=${hum.toFixed(1)}% <${MIN_HUM}% ⚠️\n`;
+                else if (hum > MAX_HUM) message += `💧 HR=${hum.toFixed(1)}% >${MAX_HUM}% ⚠️\n`;
+                else                    message += `💧 HR=${hum.toFixed(1)}%\n`;
+
+                message += `🕒 ${new Date().toLocaleTimeString("fr-FR", { timeZone: "Europe/Paris" })}`;
+
+                const params = new URLSearchParams({ chat_id: chatId, text: message });
+                const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    method: 'POST',
+                    body: params
+                });
+                telegram = r.ok ? 'ok' : 'erreur';
+            }
+        }
+
+        res.json({
+            status: 'success',
+            message: 'Mesures enregistrées',
+            data: { temp, hum, alert_temp: alertTemp, alert_hum: alertHum, telegram }
+        });
+
     } catch (err) {
         res.status(500).json({ status: "error", message: err.message });
     }

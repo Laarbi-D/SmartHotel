@@ -8,19 +8,22 @@ const translations = {
         title: 'Accès Réseau Wi-Fi', connected: 'Connecté !', welcome: 'Bienvenue', access_level: 'Accès :', browse: 'Accéder au service de l\'Hôtel & Internet', tab_client: 'Clients', tab_staff: 'Personnel', room_num: 'Numéro de chambre', room_ph: 'Ex: 301', lastname: 'Identité (Prénom et/ou Nom)', lastname_ph: 'Ex: John Doe', btn_client: 'Connexion Client', 
         staff_email: 'Adresse E-mail', staff_email_ph: 'Ex: paul@test.com', 
         staff_pwd: 'Mot de passe', staff_pwd_ph: '••••••••', 
-        btn_staff: 'Connexion Personnel', err_empty: 'Veuillez remplir tous les champs.', err_client: 'Nom ou numéro de chambre incorrect.', err_staff: 'E-mail ou mot de passe incorrect.', err_server: 'Erreur de connexion au serveur.'
+        btn_staff: 'Connexion Personnel', err_empty: 'Veuillez remplir tous les champs.', err_client: 'Nom ou numéro de chambre incorrect.', err_staff: 'E-mail ou mot de passe incorrect.', err_server: 'Erreur de connexion au serveur.',
+        err_email_format: "Veuillez inclure un '@' dans l'adresse e-mail."
     },
     en: {
         title: 'Wi-Fi Network Access', connected: 'Connected!', welcome: 'Welcome', access_level: 'Access Level:', browse: 'Access Hotel Services & Internet', tab_client: 'Guests', tab_staff: 'Staff', room_num: 'Room Number', room_ph: 'e.g., 301', lastname: 'Identity (First and/or Last Name)', lastname_ph: 'e.g., John Doe', btn_client: 'Guest Login', 
         staff_email: 'Email Address', staff_email_ph: 'e.g., paul@test.com', 
         staff_pwd: 'Password', staff_pwd_ph: '••••••••', 
-        btn_staff: 'Staff Login', err_empty: 'Please fill in all fields.', err_client: 'Incorrect name or room number.', err_staff: 'Incorrect email or password.', err_server: 'Server connection error.'
+        btn_staff: 'Staff Login', err_empty: 'Please fill in all fields.', err_client: 'Incorrect name or room number.', err_staff: 'Incorrect email or password.', err_server: 'Server connection error.',
+        err_email_format: "Please include an '@' in the email address."
     },
     es: {
         title: 'Acceso a la Red Wi-Fi', connected: '¡Conectado!', welcome: 'Bienvenido', access_level: 'Acceso:', browse: 'Acceder a los Servicios del Hotel e Internet', tab_client: 'Huéspedes', tab_staff: 'Personal', room_num: 'Número de habitación', room_ph: 'Ej: 301', lastname: 'Identidad (Nombre y/o Apellido)', lastname_ph: 'Ej: John Doe', btn_client: 'Acceso Huésped', 
         staff_email: 'Correo electrónico', staff_email_ph: 'Ej: paul@test.com', 
         staff_pwd: 'Contraseña', staff_pwd_ph: '••••••••', 
-        btn_staff: 'Acceso Personal', err_empty: 'Por favor, complete todos los campos.', err_client: 'Nombre o número de habitación incorrectos.', err_staff: 'Correo electrónico o contraseña incorrectos.', err_server: 'Error de conexión con el servidor.'
+        btn_staff: 'Acceso Personal', err_empty: 'Por favor, complete todos los campos.', err_client: 'Nombre o número de habitación incorrectos.', err_staff: 'Correo electrónico o contraseña incorrectos.', err_server: 'Error de conexión con el servidor.',
+        err_email_format: "Incluye un signo '@' en la dirección de correo electrónico."
     }
 };
 
@@ -42,8 +45,19 @@ function PortalContent() {
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData.entries());
 
-        if (role === 'client' && (!data.chambre || !data.nom_client)) return setError(t.err_empty);
-        if (role === 'employe' && (!data.mail_employe || !data.mdp_employe)) return setError(t.err_empty);
+        if (role === 'client' && (!data.chambre || !data.nom_client)) {
+            return setError(t.err_empty);
+        }
+        
+        if (role === 'employe') {
+            if (!data.mail_employe || !data.mdp_employe) {
+                return setError(t.err_empty);
+            }
+            // NOTRE PROPRE VÉRIFICATION DU @
+            if (!(data.mail_employe as string).includes('@')) {
+                return setError(t.err_email_format);
+            }
+        }
 
         const endpoint = role === 'client' ? '/api/login' : '/api/login-staff';
         const body = role === 'client' 
@@ -78,7 +92,7 @@ function PortalContent() {
 
             <div className="absolute top-6 right-6 z-50 flex gap-3 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 shadow-lg">
                 {(['fr', 'en', 'es'] as const).map(l => (
-                    <button key={l} onClick={() => setLang(l)} className={`text-xl transition-transform hover:scale-125 ${lang === l ? 'scale-125 opacity-100' : 'opacity-50'}`}>
+                    <button key={l} onClick={() => { setLang(l); setError(''); }} className={`text-xl transition-transform hover:scale-125 ${lang === l ? 'scale-125 opacity-100' : 'opacity-50'}`}>
                         {l === 'fr' ? '🇫🇷' : l === 'en' ? '🇬🇧' : '🇪🇸'}
                     </button>
                 ))}
@@ -107,8 +121,8 @@ function PortalContent() {
                 ) : (
                     <>
                         <div className="flex p-1 bg-slate-100 rounded-xl mb-6">
-                            <button onClick={() => setRole('client')} className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${role === 'client' ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}>{t.tab_client}</button>
-                            <button onClick={() => setRole('employe')} className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${role === 'employe' ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}>{t.tab_staff}</button>
+                            <button onClick={() => { setRole('client'); setError(''); }} className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${role === 'client' ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}>{t.tab_client}</button>
+                            <button onClick={() => { setRole('employe'); setError(''); }} className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${role === 'employe' ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}>{t.tab_staff}</button>
                         </div>
 
                         {error && (
@@ -117,7 +131,8 @@ function PortalContent() {
                             </div>
                         )}
 
-                        <form onSubmit={handleSubmit} className="space-y-5 animate-fade-in">
+                        {/* On ajoute noValidate pour tuer les messages d'erreur moches du navigateur */}
+                        <form onSubmit={handleSubmit} className="space-y-5 animate-fade-in" noValidate>
                             {role === 'client' ? (
                                 <>
                                     <div>
@@ -134,7 +149,8 @@ function PortalContent() {
                                 <>
                                     <div>
                                         <label className="block text-sm font-medium text-slate-700 mb-1">{t.staff_email}</label>
-                                        <input type="email" name="mail_employe" required placeholder={t.staff_email_ph} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" />
+                                        {/* Transformé en type="text" pour intercepter nous-mêmes le @ */}
+                                        <input type="text" name="mail_employe" required placeholder={t.staff_email_ph} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" />
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-slate-700 mb-1">{t.staff_pwd}</label>

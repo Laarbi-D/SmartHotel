@@ -1,4 +1,14 @@
+node_modules/
+.next/
+frontend/.next/
 mysql-data/
 .env
-node_modules/
 *.log
+
+
+#  dans ~/smarthotel/.gitignor
+frontend/.next/
+frontend/node_modules/
+Smart-Hotel/Mobile/node_modules/
+Smart-Hotel/Web/node_modules/
+Smart-Hotel/API/node_modules/

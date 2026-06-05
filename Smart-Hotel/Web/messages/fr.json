@@ -1,0 +1,142 @@
+
+{
+  "dashboard": {
+  "title": "Dashboard",
+  "subtitle": "Vue globale de l'activité",
+  "loading": "Chargement…",
+  "seeOrders": "Voir les commandes",
+  "recentOrders": "Dernières commandes",
+  "seeAll": "Tout voir",
+  "noOrders": "Aucune commande",
+  "stats": {
+    "total": "Commandes totales",
+    "pending": "En attente",
+    "preparing": "En préparation",
+    "delivered": "Livrées",
+    "revenue": "CA total (€)",
+    "products": "Produits au menu",
+    "employees": "Employés actifs"
+  },
+  "status": {
+    "pending": "En attente",
+    "preparing": "En préparation",
+    "delivered": "Livrée",
+    "cancelled": "Annulée"
+  },
+  "table": {
+    "id": "#",
+    "client": "Client",
+    "location": "Emplacement",
+    "total": "Total",
+    "status": "Statut"
+  }
+},
+
+"login": {
+  "subtitle": "Connectez-vous à votre espace",
+  "emailPlaceholder": "votre@email.com",
+  "password": "Mot de passe",
+  "submit": "Se connecter",
+  "loading": "Connexion...",
+  "error": "Identifiants incorrects."
+},
+"employees": {
+  "title": "Employés",
+  "members": "membre(s) dans l'équipe",
+  "newEmployee": "Nouvel employé",
+  "loading": "Chargement…",
+  "noUsers": "Aucun utilisateur",
+  "confirmDelete": "Supprimer",
+  "delete": "Supprimer",
+  "roles": { "admin": "Admin", "employee": "Employé" },
+  "form": {
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "password": "Mot de passe",
+    "role": "Rôle",
+    "cancel": "Annuler",
+    "create": "Créer",
+    "creating": "Création…"
+  },
+  "table": {
+    "name": "Nom",
+    "email": "Email",
+    "role": "Rôle",
+    "createdAt": "Créé le",
+    "action": "Action"
+  }
+},
+"orders": {
+  "title": "Commandes",
+  "allGood": "Tout est à jour ✓",
+  "refresh": "Actualiser",
+  "loading": "Chargement…",
+  "noOrders": "Aucune commande pour ce filtre",
+  "filter": { "all": "Toutes" },
+  "status": {
+    "pending": "En attente",
+    "preparing": "En préparation",
+    "delivered": "Livrée",
+    "cancelled": "Annulée"
+  },
+  "table": {
+    "id": "#",
+    "client": "Client",
+    "room": "Chambre",
+    "location": "Emplacement",
+    "items": "Articles",
+    "total": "Total",
+    "status": "Statut",
+    "action": "Action"
+  }
+},
+"products": {
+  "title": "Produits",
+  "product": "produit",
+  "products": "produits",
+  "newProduct": "Nouveau produit",
+  "searchPlaceholder": "Rechercher un produit…",
+  "loading": "Chargement…",
+  "notFound": "Aucun produit trouvé",
+  "confirmDelete": "Supprimer ce produit ?",
+  "available": "Disponible",
+  "unavailable": "Indispo",
+  "stock": "Stock",
+  "edit": "Modifier",
+  "delete": "Supprimer",
+  "filter": { "all": "Tous" },
+  "form": {
+    "createTitle": "Nouveau produit",
+    "editTitle": "Modifier le produit",
+    "name": "Nom",
+    "price": "Prix (€)",
+    "stock": "Stock",
+    "imageUrl": "URL image",
+    "bioFr": "Description (FR)",
+    "bioEn": "Description (EN)",
+    "bioEs": "Description (ES)",
+    "category": "Catégorie",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "create": "Créer"
+  }
+},
+"settings": {
+  "title": "Paramètres",
+  "subtitle": "Préférences de l'interface",
+  "save": "Sauvegarder",
+  "saved": "Paramètres enregistrés",
+  "profile": {
+    "title": "Mon profil",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "role": "Rôle"
+  },
+  "language": {
+    "title": "Langue de l'interface",
+    "description": "Choisissez la langue affichée dans l'application."
+  }
+}
+
+}

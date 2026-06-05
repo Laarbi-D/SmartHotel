@@ -1,0 +1,32 @@
+/* Reset minimal */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --font-display: 'Manrope', sans-serif;
+  --font-body:    'Plus Jakarta Sans', sans-serif;
+
+  --primary:        #4f8ef7;
+  --primary-hover:  #3a7be0;
+  --primary-active: #2f6fd4;
+  --primary-light:  #EEF4FF;
+  --foreground:     #1f2937;
+  --text-muted:     #6b7280;
+  --background:     #F3F6FA;
+  --card-bg:        #ffffff;
+  --border:         #e5e7eb;
+  --border-light:   #f3f4f6;
+
+  /* Status tokens */
+  --pending:          #fef9c3; --pending-text:   #92400e; --pending-dot:   #f59e0b;
+  --in-progress:      #dbeafe; --in-progress-text: #1d4ed8; --in-progress-dot: #60a5fa;
+  --done:             #dcfce7; --done-text:      #166534; --done-dot:      #4ade80;
+  --cancelled:        #fee2e2; --cancelled-text: #991b1b; --cancelled-dot: #f87171;
+}
+
+body {
+  font-family: var(--font-body), sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display), sans-serif;
+}

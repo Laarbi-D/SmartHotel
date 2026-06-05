@@ -26,7 +26,7 @@ services:
       DB_USER: "root"
       DB_PASS: "rootpassword"
       PORT: 80
-      TZ: "Europe/Paris" # Correction ici pour l'heure locale
+      TZ: "Europe/Paris"
     depends_on:
       - mysql
 
@@ -43,7 +43,7 @@ services:
     ports:
       - "3306:3306"
 
-  # --- FRONTEND (Next.js) ---
+  # --- FRONTEND CLIENT (Next.js) ---
   frontend:
     build: ./frontend
     container_name: nextjs_app
@@ -52,6 +52,17 @@ services:
     depends_on:
       - php
 
+  # --- FRONTEND ADMIN (Tes collègues) ---
+  admin_app:
+    build: ./admin # ⚠️ Remplace './admin' par le vrai nom de leur dossier s'il est différent
+    container_name: admin_app
+    ports:
+      - "3001:3000" # Expose l'admin sur le port 3001
+    restart: unless-stopped
+    depends_on:
+      - php # S'assure que l'API est lancée avant l'admin
+
+  # --- PHPMYADMIN ---
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: pma
@@ -62,7 +73,7 @@ services:
     ports:
       - "8081:80"
 
-# --- GRAFANA (Dashboards) ---
+  # --- GRAFANA (Dashboards) ---
   grafana:
     image: grafana/grafana:latest
     container_name: grafana_server
@@ -71,17 +82,17 @@ services:
     volumes:
       - grafana-storage:/var/lib/grafana
     environment:
-       - GF_SECURITY_ADMIN_PASSWORD=admin
-       - GF_SECURITY_ALLOW_EMBEDDING=true
-       - GF_SECURITY_COOKIE_SAMESITE=lax
-       - GF_SECURITY_COOKIE_SECURE=false
-       - GF_SERVER_PROTOCOL=http
-       - GF_SERVER_DOMAIN=192.168.112.158
-       - GF_SERVER_ROOT_URL=https://192.168.112.158/grafana/
-       - GF_SERVER_SERVE_FROM_SUB_PATH=true
-       - GF_SERVER_ENFORCE_DOMAIN=false
-       - GF_AUTH_ANONYMOUS_ENABLED=true
-       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      GF_SECURITY_ADMIN_PASSWORD: "admin"
+      GF_SECURITY_ALLOW_EMBEDDING: "true"
+      GF_SECURITY_COOKIE_SAMESITE: "lax"
+      GF_SECURITY_COOKIE_SECURE: "false"
+      GF_SERVER_PROTOCOL: "http"
+      GF_SERVER_DOMAIN: "192.168.112.158"
+      GF_SERVER_ROOT_URL: "https://192.168.112.158/grafana/"
+      GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+      GF_SERVER_ENFORCE_DOMAIN: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Viewer"
     restart: unless-stopped
 
 volumes:

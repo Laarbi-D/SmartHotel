@@ -1,0 +1,19 @@
+import { Tabs } from 'expo-router';
+import React from 'react';
+
+export default function TabLayout() {
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: { display: 'none' },
+      }}
+    >
+      <Tabs.Screen name="index" options={{ title: 'Login' }} />
+      <Tabs.Screen name="login" options={{ href: null }} />
+      <Tabs.Screen name="order" options={{ href: null }} />
+      <Tabs.Screen name="explore" options={{ href: null }} />
+      <Tabs.Screen name="scan" options={{ href: null }} />
+    </Tabs>
+  );
+}
