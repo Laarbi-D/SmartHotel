@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartHotel - Employés</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <img src="assets/logo.png" alt="SmartHotel Barceló" class="sidebar-logo">
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="commandes.html" class="nav-link">Commandes</a>
+            <a href="produits.html" class="nav-link">Produits</a>
+            <a href="employes.html" class="nav-link active">Employés</a>
+            <a href="analytics.html" class="nav-link">Analytics IoT</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-header">
+            <h1>Gestion du Personnel</h1>
+            <button id="openAddEmployeeBtn" class="btn-primary" style="background-color: var(--barcelo-gold); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: var(--radius-md); cursor: pointer;">
+                + Nouvel Employé
+            </button>
+        </header>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Nom & Prénom</th>
+                    <th>Email</th>
+                    <th>Rôle</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="employesTableBody">
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 2rem;">Chargement du personnel...</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <dialog id="employeeModal" class="native-modal">
+        <h2 id="modalTitle" style="color: var(--barcelo-blue); margin-bottom: 1.5rem;">Créer un accès</h2>
+        <form id="employeeForm">
+            <input type="hidden" id="employeId">
+            
+            <div class="form-group">
+                <label for="nom">Nom complet</label>
+                <input type="text" id="nom" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Adresse Email</label>
+                <input type="email" id="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe (laisser vide pour ne pas modifier)</label>
+                <input type="password" id="password">
+            </div>
+
+            <div class="form-group">
+                <label for="role">Rôle assigné</label>
+                <select id="role" class="status-select" required>
+                    <option value="Admin">Administrateur</option>
+                    <option value="Reception">Réceptionniste</option>
+                    <option value="Barman">Barman</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button type="button" id="closeEmployeeModalBtn" class="btn-outline" style="flex: 1; padding: 0.8rem; cursor: pointer;">Annuler</button>
+                <button type="submit" class="btn-primary" style="flex: 1; background-color: var(--barcelo-blue); color: white; padding: 0.8rem; border: none; cursor: pointer;">Enregistrer</button>
+            </div>
+        </form>
+    </dialog>
+
+    <script src="js/api.js"></script>
+    <script src="js/employes.js"></script>
+</body>
+</html>

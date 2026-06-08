@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartHotel - Commandes</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <img src="assets/logo.png" alt="SmartHotel Barceló" class="sidebar-logo">
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="commandes.html" class="nav-link active">Commandes</a>
+            <a href="produits.html" class="nav-link">Produits</a>
+            <a href="employes.html" class="nav-link">Employés</a>
+            <a href="analytics.html" class="nav-link">Analytics IoT</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-header">
+            <h1>Gestion des Commandes</h1>
+            <div class="filters">
+                <select id="filterStatus" class="status-select" style="padding: 0.8rem; min-width: 200px;">
+                    <option value="Toutes">Toutes les commandes</option>
+                    <option value="En attente">En attente</option>
+                    <option value="En préparation">En préparation</option>
+                    <option value="Livrée">Livrées</option>
+                </select>
+            </div>
+        </header>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>N° Commande</th>
+                    <th>Client / Chambre</th>
+                    <th>Date & Heure</th>
+                    <th>Montant</th>
+                    <th>Statut Actuel</th>
+                    <th>Action (Modifier)</th>
+                </tr>
+            </thead>
+            <tbody id="commandesTableBody">
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 2rem;">Chargement des commandes...</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/commandes.js"></script>
+</body>
+</html>

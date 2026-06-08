@@ -1,0 +1,46 @@
+<main class="dashboard-content">
+    <header class="page-header">
+        <h1 style="color: var(--barcelo-blue);">Analytics & IoT</h1>
+    </header>
+
+    <section class="kpi-grid">
+        <div class="card kpi-card">
+            <span class="kpi-label">Température Actuelle</span>
+            <h2 id="kpi-temp" class="kpi-value">-- °C</h2>
+        </div>
+        <div class="card kpi-card">
+            <span class="kpi-label">Humidité Actuelle</span>
+            <h2 id="kpi-hum" class="kpi-value">-- %</h2>
+        </div>
+        <div class="card kpi-card">
+            <span class="kpi-label">Statut AHT20</span>
+            <h2 id="kpi-status" class="kpi-value status-ok">Conforme</h2>
+        </div>
+    </section>
+
+    <section class="grafana-section">
+    <div class="card grafana-card" style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+    <h3 style="color: var(--barcelo-blue); margin-bottom: 1rem; border-bottom: 2px solid var(--barcelo-gold); padding-bottom: 0.5rem; display: inline-block;">
+        Historique des Températures (Chambre Froide / Bar)
+    </h3>
+    
+    <iframe 
+        src="http://localhost:3001/d-solo/votre-id-dashboard/iot-smarthotel?orgId=1&panelId=1&theme=light" 
+        width="100%" 
+        height="400" 
+        frameborder="0"
+        style="border-radius: 8px;">
+    </iframe>
+</div>
+        
+        <div class="card grafana-card">
+            <h3>Historique d'Humidité</h3>
+            <iframe 
+                src="http://localhost:3001/d-solo/dashboard-iot/humidite?orgId=1&panelId=2&theme=light" 
+                width="100%" 
+                height="350" 
+                frameborder="0">
+            </iframe>
+        </div>
+    </section>
+</main>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartHotel - Dashboard</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <img src="assets/logo.png" alt="SmartHotel Barceló" class="sidebar-logo">
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-link active">Dashboard</a>
+            <a href="commandes.html" class="nav-link">Commandes</a>
+            <a href="produits.html" class="nav-link">Produits</a>
+            <a href="employes.html" class="nav-link">Employés</a>
+            <a href="analytics.html" class="nav-link">Analytics IoT</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-header">
+            <h1>Vue d'ensemble</h1>
+            <button id="logoutBtn" class="btn-outline">Déconnexion</button>
+        </header>
+
+        <section class="kpi-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
+            <div class="card kpi-card">
+                <p class="kpi-title">En attente</p>
+                <h2 id="kpi-attente" class="kpi-value">--</h2>
+            </div>
+            <div class="card kpi-card">
+                <p class="kpi-title">En préparation</p>
+                <h2 id="kpi-preparation" class="kpi-value">--</h2>
+            </div>
+            <div class="card kpi-card">
+                <p class="kpi-title">Livrées (Aujourd'hui)</p>
+                <h2 id="kpi-livree" class="kpi-value">--</h2>
+            </div>
+            <div class="card kpi-card" style="border-top: 4px solid var(--barcelo-gold);">
+                <p class="kpi-title">Chiffre du jour</p>
+                <h2 id="kpi-ca" class="kpi-value" style="color: var(--barcelo-gold);">-- €</h2>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

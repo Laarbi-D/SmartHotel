@@ -1,0 +1,20 @@
+:root {
+  /* Palette Barceló */
+  --barcelo-blue: #0A1B3F;
+  --barcelo-gold: #C5A059;
+  --barcelo-gold-hover: #D4B26A;
+  --bg-off-white: #F8F9FA;
+  --text-dark: #2C3E50;
+  --text-gray: #7F8C8D;
+  --surface-white: #FFFFFF;
+
+  /* Ombres et Espacements */
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --shadow-sidebar: 2px 0 10px rgba(0, 0, 0, 0.03);
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Typographie */
+  --font-heading: 'Playfair Display', serif; /* Pour le côté premium */
+  --font-body: 'Inter', sans-serif; /* Pour la lisibilité des données */
+}

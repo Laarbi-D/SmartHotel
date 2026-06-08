@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartHotel - Produits</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <img src="assets/logo.png" alt="SmartHotel Barceló" class="sidebar-logo">
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="commandes.html" class="nav-link">Commandes</a>
+            <a href="produits.html" class="nav-link active">Produits</a>
+            <a href="employes.html" class="nav-link">Employés</a>
+            <a href="analytics.html" class="nav-link">Analytics IoT</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-header">
+            <h1>Catalogue Produits</h1>
+            <button id="openAddModalBtn" class="btn-primary" style="background-color: var(--barcelo-gold); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: var(--radius-md); cursor: pointer;">
+                + Nouveau Produit
+            </button>
+        </header>
+
+        <section id="productGrid" class="product-grid">
+            <p style="grid-column: 1 / -1; text-align: center;">Chargement des produits...</p>
+        </section>
+    </main>
+
+    <dialog id="productModal" class="native-modal">
+        <h2 id="modalTitle" style="color: var(--barcelo-blue); margin-bottom: 1.5rem;">Ajouter un produit</h2>
+        <form id="productForm">
+            <input type="hidden" id="produitId">
+            
+            <div class="form-group">
+                <label for="nom">Nom de la boisson / produit</label>
+                <input type="text" id="nom" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="prix">Prix (€)</label>
+                <input type="number" id="prix" step="0.01" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="image">Nom du fichier image (ex: mojito.jpg)</label>
+                <input type="text" id="image" placeholder="Image optionnelle">
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button type="button" id="closeModalBtn" class="btn-outline" style="flex: 1; padding: 0.8rem; cursor: pointer;">Annuler</button>
+                <button type="submit" class="btn-primary" style="flex: 1; background-color: var(--barcelo-blue); color: white; padding: 0.8rem; border: none; cursor: pointer;">Enregistrer</button>
+            </div>
+        </form>
+    </dialog>
+
+    <script src="js/api.js"></script>
+    <script src="js/produits.js"></script>
+</body>
+</html>

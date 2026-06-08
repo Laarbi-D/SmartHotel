@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartHotel - Connexion</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <style>
+        .login-layout {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Remplacement par l'image réelle de l'hôtel */
+            background: url('../assets/images/barcelo-bg.jpg') center/cover no-repeat;
+        }
+        .login-card {
+            background: var(--surface-white);
+            padding: 3rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        .brand-logo {
+            width: 150px;
+            margin-bottom: 2rem;
+        }
+        /* Reste du CSS pour les inputs et le bouton doré... */
+    </style>
+</head>
+<body class="login-layout">
+    <div class="login-card">
+        <img src="../assets/logo.png" alt="SmartHotel" class="brand-logo">
+        <h2 style="font-family: var(--font-heading); color: var(--barcelo-blue);">Espace Employé</h2>
+        
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Email" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Mot de passe" required>
+            </div>
+            <button type="submit" class="btn-primary">Se connecter</button>
+        </form>
+    </div>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

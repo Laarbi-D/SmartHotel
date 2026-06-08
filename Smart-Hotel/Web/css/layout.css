@@ -1,0 +1,70 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--bg-off-white);
+    color: var(--text-dark);
+    font-family: var(--font-body);
+    margin: 0;
+}
+
+/* === SIDEBAR === */
+.sidebar {
+    width: 260px;
+    background-color: var(--barcelo-blue);
+    color: var(--surface-white);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    box-shadow: var(--shadow-sidebar);
+    z-index: 10;
+}
+
+.sidebar-logo {
+    width: 140px;
+    margin: 0 auto 3rem;
+    display: block;
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--barcelo-gold);
+}
+
+/* === MAIN CONTENT === */
+.main-content {
+    flex: 1;
+    padding: 2rem 4rem;
+    overflow-y: auto;
+}
+
+.page-header {
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-header h1 {
+    font-family: var(--font-heading);
+    color: var(--barcelo-blue);
+    font-size: 2.5rem;
+    margin: 0;
+}
