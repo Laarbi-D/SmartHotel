@@ -54,7 +54,7 @@ services:
 
   # --- FRONTEND ADMIN (Tes collègues) ---
   admin_app:
-    build: ./admin # ⚠️ Remplace './admin' par le vrai nom de leur dossier s'il est différent
+    build: ./Backend/admin # ⚠️ Remplace './admin' par le vrai nom de leur dossier s'il est différent
     container_name: admin_app
     ports:
       - "3001:3000" # Expose l'admin sur le port 3001
@@ -68,11 +68,17 @@ services:
     container_name: admin_web
     ports:
       - "3002:80" # Accessible sur localhost:3002
+    volumes:
+      - ./Smart-Hotel/Web:/usr/share/nginx/html # 👈 AJOUTE CES DEUX LIGNES !
     restart: unless-stopped
     depends_on:
       - php # S'assure que l'API est lancée avant le frontend admin
 
       
+
+
+
+
 
 
 
