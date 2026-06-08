@@ -62,6 +62,20 @@ services:
     depends_on:
       - php # S'assure que l'API est lancée avant l'admin
 
+# --- LE NOUVEAU FRONTEND ADMIN (HTML/CSS/JS) ---
+  admin_web:
+    build: ./Smart-Hotel/Web
+    container_name: admin_web
+    ports:
+      - "3002:80" # Accessible sur localhost:3002
+    restart: unless-stopped
+    depends_on:
+      - php # S'assure que l'API est lancée avant le frontend admin
+
+      
+
+
+
   # --- PHPMYADMIN ---
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
