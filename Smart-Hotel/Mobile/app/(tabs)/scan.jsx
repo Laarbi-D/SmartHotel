@@ -134,13 +134,15 @@ export default function ScanScreen() {
             <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
               <Ionicons name="chevron-back" size={24} color={COLORS.textLight} />
             </TouchableOpacity>
-            <View style={styles.headerCenter}>
-              <View style={styles.logoTiny}>
-                <Ionicons name="business" size={14} color={COLORS.primary} />
-              </View>
-              <Text style={styles.headerTitle}>Scanner votre transat</Text>
-              <Text style={styles.headerSub}>Retrouvez automatiquement votre emplacement</Text>
-            </View>
+           <View style={styles.headerCenter}>
+  <Image
+    source={require('../assets/logo.png')}
+    style={styles.logoTiny}
+    resizeMode="contain"
+  />
+  <Text style={styles.headerTitle}>Scanner votre transat</Text>
+  <Text style={styles.headerSub}>Retrouvez automatiquement votre emplacement</Text>
+</View>
             <View style={{ width: 40 }} /> {/* Spacer pour centrer */}
           </Animated.View>
 
@@ -225,7 +227,7 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 10 },
   backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.1)', justifyContent: 'center', alignItems: 'center' },
   headerCenter: { alignItems: 'center', flex: 1 },
-  logoTiny: { width: 28, height: 28, borderRadius: 14, backgroundColor: COLORS.surface, justifyContent: 'center', alignItems: 'center', marginBottom: 6 },
+  logoTiny: { width: 48, height: 48, marginBottom: 4 },
   headerTitle: { fontSize: 18, fontWeight: '800', color: COLORS.surface, letterSpacing: 0.5 },
   headerSub: { fontSize: 12, color: 'rgba(255,255,255,0.7)', marginTop: 2 },
 

@@ -1,0 +1,147 @@
+{
+  "nav": {
+    "dashboard": "Panel",
+    "orders": "Pedidos",
+    "products": "Productos",
+    "employees": "Empleados",
+    "settings": "Ajustes",
+    "logout": "Cerrar sesión"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "subtitle": "Vista general de la actividad",
+    "loading": "Cargando…",
+    "seeOrders": "Ver pedidos",
+    "recentOrders": "Últimos pedidos",
+    "seeAll": "Ver todo",
+    "noOrders": "Sin pedidos",
+    "stats": {
+      "total": "Pedidos totales",
+      "pending": "En espera",
+      "preparing": "En preparación",
+      "delivered": "Entregados",
+      "revenue": "CA total (€)",
+      "products": "Productos en carta",
+      "employees": "Empleados activos"
+    },
+    "status": {
+      "pending": "En espera",
+      "preparing": "En preparación",
+      "delivered": "Entregado",
+      "cancelled": "Cancelado"
+    },
+    "table": {
+      "id": "#",
+      "client": "Cliente",
+      "location": "Ubicación",
+      "total": "Total",
+      "status": "Estado"
+    }
+  },
+  "login": {
+    "subtitle": "Inicia sesión en tu espacio",
+    "emailPlaceholder": "tu@email.com",
+    "password": "Contraseña",
+    "submit": "Iniciar sesión",
+    "loading": "Conectando...",
+    "error": "Credenciales incorrectas."
+  },
+  "employees": {
+    "title": "Empleados",
+    "members": "miembro(s) en el equipo",
+    "newEmployee": "Nuevo empleado",
+    "loading": "Cargando…",
+    "noUsers": "Sin usuarios",
+    "confirmDelete": "¿Eliminar a",
+    "delete": "Eliminar",
+    "roles": { "admin": "Admin", "employee": "Empleado" },
+    "form": {
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "password": "Contraseña",
+      "role": "Rol",
+      "cancel": "Cancelar",
+      "create": "Crear",
+      "creating": "Creando…"
+    },
+    "table": {
+      "name": "Nombre",
+      "email": "Email",
+      "role": "Rol",
+      "createdAt": "Creado el",
+      "action": "Acción"
+    }
+  },
+  "orders": {
+  "title": "Pedidos",
+  "allGood": "Todo al día ✓",
+  "refresh": "Actualizar",
+  "loading": "Cargando…",
+  "noOrders": "Sin pedidos para este filtro",
+  "filter": { "all": "Todos" },
+  "status": {
+    "pending": "En espera",
+    "preparing": "En preparación",
+    "delivered": "Entregado",
+    "cancelled": "Cancelado"
+  },
+  "table": {
+    "id": "#",
+    "client": "Cliente",
+    "room": "Habitación",
+    "location": "Ubicación",
+    "items": "Artículos",
+    "total": "Total",
+    "status": "Estado",
+    "action": "Acción"
+  }
+},
+"products": {
+  "title": "Productos",
+  "product": "producto",
+  "products": "productos",
+  "newProduct": "Nuevo producto",
+  "searchPlaceholder": "Buscar un producto…",
+  "loading": "Cargando…",
+  "notFound": "Sin productos",
+  "confirmDelete": "¿Eliminar este producto?",
+  "available": "Disponible",
+  "unavailable": "No disponible",
+  "stock": "Stock",
+  "edit": "Editar",
+  "delete": "Eliminar",
+  "filter": { "all": "Todos" },
+  "form": {
+    "createTitle": "Nuevo producto",
+    "editTitle": "Editar producto",
+    "name": "Nombre",
+    "price": "Precio (€)",
+    "stock": "Stock",
+    "imageUrl": "URL imagen",
+    "bioFr": "Descripción (FR)",
+    "bioEn": "Descripción (EN)",
+    "bioEs": "Descripción (ES)",
+    "category": "Categoría",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "create": "Crear"
+  }
+},
+"settings": {
+  "title": "Ajustes",
+  "subtitle": "Preferencias de la interfaz",
+  "save": "Guardar",
+  "saved": "Ajustes guardados",
+  "profile": {
+    "title": "Mi perfil",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "role": "Rol"
+  },
+  "language": {
+    "title": "Idioma de la interfaz",
+    "description": "Elige el idioma que se muestra en la aplicación."
+  }
+}
+}
