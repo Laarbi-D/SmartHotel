@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Barcelo App - Connexion</title>
-    <link rel="stylesheet" href="/css/variables.css">
-<link rel="stylesheet" href="/css/layout.css">
-<link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
     <style>
         .login-layout {
             height: 100vh;
@@ -14,7 +14,7 @@
             justify-content: center;
             background-color: var(--barcelo-blue); /* Applique le bleu Barcelo */
             /* Attention : plus de ../ ici ! */
-            background-image: url('assets/images/barcelo-bg.jpg');
+            background-image: url('/assets/images/barcelo-bg.jpg');
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
@@ -45,7 +45,7 @@
 </head>
 <body class="login-layout">
     <div class="login-card">
-        <img src="assets/logo.png" alt="Barcelo App" class="brand-logo" onerror="this.style.display='none'">
+        <img src="/assets/logo.png" alt="Barcelo App" class="brand-logo" onerror="this.style.display='none'">
         <h2 style="font-family: var(--font-heading); color: var(--barcelo-blue); margin-bottom: 1.5rem;">Espace Employé</h2>
         
         <form id="loginForm">

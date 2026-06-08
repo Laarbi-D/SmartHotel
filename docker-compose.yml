@@ -14,9 +14,11 @@ services:
       - php
       - grafana
 
-  # --- BACKEND (Node.js API) ---
+  # --- BACKEND (Node.js API & Ancien Admin PHP) ---
   php:
-    build: ./backend
+    build:
+      context: ./backend
+      network: host # 🌐 Permet au conteneur d'utiliser la co Tailscale pendant la compilation
     container_name: php_server
     environment:
       TELEGRAM_BOT_TOKEN: "8525409568:AAG3saVaLLltmxPLyPKxKeeTUDefK6eldss"
@@ -45,43 +47,26 @@ services:
 
   # --- FRONTEND CLIENT (Next.js) ---
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      network: host # 🌐 Règle le problème de Next.js qui télécharge Google Fonts sur VPN
     container_name: nextjs_app
     expose:
       - "3000"
     depends_on:
       - php
 
-  # --- FRONTEND ADMIN (Tes collègues) ---
-  admin_app:
-    build: ./Backend/admin # ⚠️ Remplace './admin' par le vrai nom de leur dossier s'il est différent
-    container_name: admin_app
-    ports:
-      - "3001:3000" # Expose l'admin sur le port 3001
-    restart: unless-stopped
-    depends_on:
-      - php # S'assure que l'API est lancée avant l'admin
-
-# --- LE NOUVEAU FRONTEND ADMIN (HTML/CSS/JS) ---
+ # --- NOUVEAU FRONTEND ADMIN (HTML/CSS/JS) ---
   admin_web:
-    build: ./Smart-Hotel/Web
+    build: 
+      context: ./Smart-Hotel/Web # Il va lire ton Dockerfile Nginx ici
     container_name: admin_web
     ports:
-      - "3002:80" # Accessible sur localhost:3002
-    volumes:
-      - ./Smart-Hotel/Web:/usr/share/nginx/html # 👈 AJOUTE CES DEUX LIGNES !
+      - "3002:80" # Nginx écoute sur le port 80 à l'intérieur du conteneur
     restart: unless-stopped
     depends_on:
-      - php # S'assure que l'API est lancée avant le frontend admin
-
+      - php
       
-
-
-
-
-
-
-
   # --- PHPMYADMIN ---
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
