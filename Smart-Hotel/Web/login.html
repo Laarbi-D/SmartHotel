@@ -2,18 +2,22 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>SmartHotel - Connexion</title>
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/variables.css">
-    <link rel="stylesheet" href="css/layout.css">
+    <title>Barcelo App - Connexion</title>
+    <link rel="stylesheet" href="/css/variables.css">
+<link rel="stylesheet" href="/css/layout.css">
+<link rel="stylesheet" href="/css/components.css">
     <style>
         .login-layout {
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            /* Remplacement par l'image réelle de l'hôtel */
-            background: url('../assets/images/barcelo-bg.jpg') center/cover no-repeat;
+            background-color: var(--barcelo-blue); /* Applique le bleu Barcelo */
+            /* Attention : plus de ../ ici ! */
+            background-image: url('assets/images/barcelo-bg.jpg');
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
         }
         .login-card {
             background: var(--surface-white);
@@ -28,13 +32,21 @@
             width: 150px;
             margin-bottom: 2rem;
         }
-        /* Reste du CSS pour les inputs et le bouton doré... */
+        /* Style de secours pour s'assurer que ça marche direct */
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: var(--radius-md);
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body class="login-layout">
     <div class="login-card">
-        <img src="../assets/logo.png" alt="SmartHotel" class="brand-logo">
-        <h2 style="font-family: var(--font-heading); color: var(--barcelo-blue);">Espace Employé</h2>
+        <img src="assets/logo.png" alt="Barcelo App" class="brand-logo" onerror="this.style.display='none'">
+        <h2 style="font-family: var(--font-heading); color: var(--barcelo-blue); margin-bottom: 1.5rem;">Espace Employé</h2>
         
         <form id="loginForm">
             <div class="input-group">
@@ -43,7 +55,7 @@
             <div class="input-group">
                 <input type="password" id="password" placeholder="Mot de passe" required>
             </div>
-            <button type="submit" class="btn-primary">Se connecter</button>
+            <button type="submit" class="btn-primary" style="width: 100%; padding: 1rem; border: none; background-color: var(--barcelo-gold); color: white; font-weight: bold; border-radius: var(--radius-md); cursor: pointer;">Se connecter</button>
         </form>
     </div>
     <script src="js/api.js"></script>
