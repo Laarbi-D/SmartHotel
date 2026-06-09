@@ -1,6 +1,6 @@
 {
   "expo": {
-   "name": "Barceló App",
+    "name": "Barceló App",
     "slug": "smarthotel-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -52,8 +52,6 @@
         }
       ]
     },
-
-    
     "web": {
       "output": "static",
       "favicon": "./assets/logo.png"
@@ -93,12 +91,7 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    },
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "577420bf-ce4a-41a4-a467-5f2395ee8e5a"
-      }
     }
   }
 }
+

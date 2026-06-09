@@ -1,4 +1,5 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
+// On laisse Nginx faire le pont de /api vers le conteneur Node.js
+const API_URL = "/api";
 
 function getToken() {
   if (typeof window === "undefined") return null;

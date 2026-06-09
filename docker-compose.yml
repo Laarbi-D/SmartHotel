@@ -18,7 +18,7 @@ services:
   php:
     build:
       context: ./backend
-      network: host # 🌐 Permet au conteneur d'utiliser la co Tailscale pendant la compilation
+      network: host # Permet au conteneur d'utiliser la co Tailscale pendant la compilation
     container_name: php_server
     environment:
       TELEGRAM_BOT_TOKEN: "8525409568:AAG3saVaLLltmxPLyPKxKeeTUDefK6eldss"
@@ -27,10 +27,22 @@ services:
       DB_NAME: "smart_hotel_bdd"
       DB_USER: "root"
       DB_PASS: "rootpassword"
+      JWT_SECRET: "barcelo_secret_key_2026" # La clé de sécurité pour la connexion
       PORT: 80
       TZ: "Europe/Paris"
     depends_on:
       - mysql
+# --- TON NOUVEAU BACKEND BARCELO (Node) ---
+  barcelo_api:
+    build:
+      context: ./Smart-Hotel/API
+    container_name: barcelo_api
+    environment:
+      # ... tes variables
+    depends_on:
+      - mysql
+
+
 
   # --- DATABASE (MySQL) ---
   mysql:
@@ -56,17 +68,18 @@ services:
     depends_on:
       - php
 
- # --- NOUVEAU FRONTEND ADMIN (HTML/CSS/JS) ---
-  admin_web:
+# --- NOUVEAU FRONTEND ADMIN (React / Next.js) ---
+  admin_react:
     build: 
-      context: ./Smart-Hotel/Web # Il va lire ton Dockerfile Nginx ici
-    container_name: admin_web
-    ports:
-      - "3002:80" # Nginx écoute sur le port 80 à l'intérieur du conteneur
+      context: ./Smart-Hotel/AdminReact
+      network: host # pour régler le problème des fonts.
+    container_name: admin_react
+    expose:
+      - "3000"
     restart: unless-stopped
     depends_on:
       - php
-      
+
   # --- PHPMYADMIN ---
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

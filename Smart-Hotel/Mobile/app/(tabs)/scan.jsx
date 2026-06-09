@@ -6,7 +6,8 @@ import {
   View, 
   ImageBackground,
   Dimensions,
-  Platform
+  Platform,
+  Image
 } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as Linking from 'expo-linking';
@@ -136,7 +137,7 @@ export default function ScanScreen() {
             </TouchableOpacity>
            <View style={styles.headerCenter}>
   <Image
-    source={require('../assets/logo.png')}
+    source={require('../../assets/logo.png')}
     style={styles.logoTiny}
     resizeMode="contain"
   />
